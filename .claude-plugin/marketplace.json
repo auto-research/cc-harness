@@ -1,0 +1,21 @@
+{
+  "marketplace": {
+    "name": "cc-harness",
+    "description": "Harness Engineering audit and toolkit for AI coding agents",
+    "owner": {
+      "name": "auto-research"
+    }
+  },
+  "plugins": [
+    {
+      "id": "cc-harness",
+      "name": "cc-harness",
+      "description": "Harness Engineering compliance audit + toolkit. 10-principle evaluation with dual-layer scoring (deterministic + LLM).",
+      "version": "0.1.1",
+      "source": {
+        "type": "directory",
+        "path": "./"
+      }
+    }
+  ]
+}

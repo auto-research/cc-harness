@@ -1,5 +1,7 @@
+[中文版](./agents-md-template.zh.md)
+
 ---
-title: AGENTS.md 模板指南
+title: AGENTS.md Template Guide
 domain: tech
 type: template
 created: 2026-04-02
@@ -7,58 +9,56 @@ updated: 2026-04-02
 tags: [harness-engineering, codex, agents-md, template, team]
 ---
 
-# AGENTS.md 模板指南
+# AGENTS.md Template Guide
 
-这份模板面向 Codex 侧的团队制度设计。它主要服务原则 1、2、8、9、10：不要把模型当
-可靠同事、把 prompt 视为控制面、用角色分离取代人海战术、把独立验证写进制度。
+This template is aimed at institutional design for the Codex side of the team. It primarily serves principles 1, 2, 8, 9, and 10: don't treat the model as a reliable colleague, treat the prompt as a control surface, use role separation instead of headcount, and encode independent verification into the institution.
 
-## AGENTS.md 与 CLAUDE.md 的哲学差异
+## The Philosophical Difference Between AGENTS.md and CLAUDE.md
 
-`CLAUDE.md` 的重点是让现场规则进入 conversation，让 Claude Code 在运行时更快拿到
-当前项目的约束与入口。
+The focus of `CLAUDE.md` is getting live rules into the conversation — helping Claude Code quickly retrieve the current project's constraints and entry points at runtime.
 
-`AGENTS.md` 的重点是让规则进入 institution，让 Codex 在仓库边界内先理解：
+The focus of `AGENTS.md` is getting rules into the institution — helping Codex understand, within repository boundaries, upfront:
 
-- 谁负责什么
-- 先读什么
-- 哪些规则是全局绑定
-- 哪些领域知识要按需加载
+- Who is responsible for what
+- What to read first
+- Which rules are globally binding
+- Which domain knowledge to load on demand
 
-可以把它理解为：
+Think of it as:
 
-- `CLAUDE.md` 偏运行时记忆入口
-- `AGENTS.md` 偏制度入口与责任边界
+- `CLAUDE.md` leaning toward a runtime memory entry point
+- `AGENTS.md` leaning toward an institutional entry point and responsibility boundary
 
-这正对应原则 10：团队制度优先于个人技巧。
+This maps exactly to principle 10: team institution takes precedence over individual technique.
 
-## 层级、作用域与优先级
+## Hierarchy, Scope, and Priority
 
-团队写 `AGENTS.md` 时，建议明确以下优先级链：
+When writing `AGENTS.md`, teams should make the following priority chain explicit:
 
-1. 平台 system / developer instructions
-2. 仓库根 `AGENTS.md`
-3. 根 `AGENTS.md` 引用的治理文件，例如 `governance/rules.md`
-4. 子目录或领域级 `AGENT.md`
-5. 当前任务的用户要求
+1. Platform system / developer instructions
+2. Repository root `AGENTS.md`
+3. Governance files referenced by the root `AGENTS.md`, e.g. `governance/rules.md`
+4. Subdirectory or domain-level `AGENT.md`
+5. User requirements for the current task
 
-实践规则：
+Practical rules:
 
-- 根 `AGENTS.md` 负责制度入口，不负责细节大全。
-- 领域 `AGENT.md` 负责 domain ownership，不重写全局规则。
-- 用户请求可以加任务目标，但不能推翻高优先级安全边界。
+- The root `AGENTS.md` is responsible for the institutional entry point, not a comprehensive reference.
+- Domain `AGENT.md` is responsible for domain ownership — it does not rewrite global rules.
+- User requests may add task goals but cannot override higher-priority safety boundaries.
 
-## 推荐结构
+## Recommended Structure
 
-一个团队级 `AGENTS.md` 建议回答六件事：
+A team-level `AGENTS.md` should answer six things:
 
-1. 先读哪些共享规则。
-2. 仓库有哪些层。
-3. 领域 agent 在哪里。
-4. 知识应如何按需加载。
-5. 哪些质量门禁必须经过。
-6. 哪些任务必须转交给明确 owner。
+1. Which shared rules to read first.
+2. What layers the repository has.
+3. Where domain agents live.
+4. How knowledge should be loaded on demand.
+5. Which quality gates are mandatory.
+6. Which tasks must be handed off to a clear owner.
 
-## 完整模板示例
+## Complete Template Example
 
 ```md
 # AGENTS.md
@@ -112,27 +112,27 @@ All work must satisfy:
 - Prefer maintainability over short-term speed.
 ```
 
-## 写法建议
+## Writing Guidelines
 
-### 该写什么
+### What to Include
 
-- 仓库级行为基线
-- 目录层次与知识入口
-- agent 发现路径
-- 责任边界
-- 共享质量门禁
+- Repository-level behavior baseline
+- Directory structure and knowledge entry points
+- Agent discovery paths
+- Responsibility boundaries
+- Shared quality gates
 
-### 不该写什么
+### What to Exclude
 
-- 某个 package 的函数命名细节
-- 临时调试步骤
-- 个人快捷命令
-- 会快速过期的 session 状态
+- Function naming details for a specific package
+- Temporary debugging steps
+- Personal shortcut commands
+- Session state that will quickly go stale
 
-## 与 Harness principles 的对应
+## Mapping to Harness Principles
 
-- 原则 1：不要假设模型会自己找到正确边界。
-- 原则 2：用层级化文本把控制面拆清楚。
-- 原则 8：角色与责任先分离，再协作。
-- 原则 9：验证不挂在实现者自己身上。
-- 原则 10：把“怎么做事”写成团队制度，而不是口口相传。
+- Principle 1: Don't assume the model will find the right boundaries on its own.
+- Principle 2: Use layered text to decompose the control surface clearly.
+- Principle 8: Separate roles and responsibilities before collaboration.
+- Principle 9: Verification is not the implementer's responsibility alone.
+- Principle 10: Write "how work gets done" as team institution, not tribal knowledge.

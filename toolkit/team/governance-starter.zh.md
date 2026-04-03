@@ -1,7 +1,5 @@
-[中文版](./governance-starter.zh.md)
-
 ---
-title: Governance Starter Templates
+title: Governance 启动模板
 domain: tech
 type: template
 created: 2026-04-02
@@ -9,13 +7,16 @@ updated: 2026-04-02
 tags: [harness-engineering, governance, template, team]
 ---
 
-# Governance Starter Templates
+# Governance 启动模板
 
-This starter covers four team governance files: `rules.md`, `dont.md`, `quality-gates.md`, and `verification.md`. It corresponds to principles 1, 6, 9, and 10: distill experience into institution, write failure paths as the main path, make verification independent, and make team constraints explicit.
+这份 starter 覆盖四个团队治理文件：`rules.md`、`dont.md`、`quality-gates.md`、
+`verification.md`。它对应原则 1、6、9、10：把经验沉淀成制度，把失败路径写成主路径，
+把验证独立化，把团队约束显式化。
 
-## `rules.md` Template
+## `rules.md` 模板
 
-Note: This file defines the shared behavior baseline. The focus is not on listing slogans, but on clearly writing out executable output rules, acceptance criteria, risk disclosure, maintainability, knowledge loading, and agent boundaries.
+说明：这个文件定义共享行为基线。重点不是列口号，而是把可执行的输出规则、验收标准、
+风险披露、维护性、知识加载、agent 边界写清楚。
 
 ```md
 # Governance rules
@@ -65,9 +66,10 @@ Cross-domain work requires an explicit handoff instead of overlapping
 ownership.
 ```
 
-## `dont.md` Template
+## `dont.md` 模板
 
-Note: Every prohibition must have a trigger scenario, a source lesson, and specific prohibited behaviors. Prohibitions without a source lesson easily degrade into personal taste.
+说明：每一条禁令都要有触发场景、来源教训、具体禁止行为。没有 source lesson 的禁令，
+很容易退化成个人口味。
 
 ```md
 # Governance don'ts
@@ -76,58 +78,58 @@ This file turns repeated mistakes into non-negotiable prohibitions.
 If a task matches one of these scenarios, stop the prohibited behavior before
 continuing.
 
-## [Prohibition Title 1]
+## [禁令标题 1]
 
-Trigger scenario: Describe the specific type of work that activates this prohibition.
+触发场景：填写会触发本禁令的具体工作类型。
 
-Source lesson: Name the incident, postmortem, customer feedback, production failure, or historical document.
+来源教训：写明事故、复盘、客户反馈、线上故障或历史文档来源。
 
-Prohibited behaviors:
-- Prohibited behavior 1
-- Prohibited behavior 2
-- Prohibited behavior 3
+具体禁止行为：
+- 禁止行为 1
+- 禁止行为 2
+- 禁止行为 3
 
-## [Prohibition Title 2]
+## [禁令标题 2]
 
-Trigger scenario: Describe the specific type of work that activates this prohibition.
+触发场景：填写会触发本禁令的具体工作类型。
 
-Source lesson: Name the incident, postmortem, customer feedback, production failure, or historical document.
+来源教训：写明事故、复盘、客户反馈、线上故障或历史文档来源。
 
-Prohibited behaviors:
-- Prohibited behavior 1
-- Prohibited behavior 2
-- Prohibited behavior 3
+具体禁止行为：
+- 禁止行为 1
+- 禁止行为 2
+- 禁止行为 3
 ```
 
-### Ready-to-Adapt Example Entries
+### 可直接改写的示例条目
 
 ```md
-## Claiming Completion Without Verification
+## 未验证就宣称完成
 
-Trigger scenario: Any delivery of code, templates, workflows, or content that requires claiming "done."
+触发场景：代码、模板、工作流或内容交付前需要宣称“已完成”。
 
-Source lesson: Multiple past deliveries where the implementer treated "reading it myself" as verification, allowing regressions and missed checks to enter the mainline.
+来源教训：历史交付中多次出现实现者把“自己读了一遍”当成验证，导致回归和漏检进入主线。
 
-Prohibited behaviors:
-- Do not claim "verification passed" without independent verification evidence.
-- Do not treat "the AI already checked it" as an independent review.
-- Do not skip failure logs or bypass key commands and give a PASS.
+具体禁止行为：
+- 禁止在没有独立验证证据的情况下宣称“已通过验证”。
+- 禁止把“AI 已检查过”当成独立审查。
+- 禁止省略失败日志或跳过关键命令后直接给 PASS。
 
-## Contaminating Durable Knowledge With Temporary Context
+## 临时上下文污染长期知识
 
-Trigger scenario: Writing temporary session state, debugging notes, or unsettled conclusions from a single session into the knowledge base or global rules.
+触发场景：把一次会话中的临时状态、调试笔记或未定结论写入知识库或全局规则。
 
-Source lesson: In the past, session-level TODOs were written into shared entry files, causing subsequent sessions to load stale information.
+来源教训：历史上曾把 session 级 TODO 写进共享入口文件，导致后续会话加载过期信息。
 
-Prohibited behaviors:
-- Do not write temporary debugging state directly into root-level entry files.
-- Do not crystallize unverified conclusions into reusable knowledge.
-- Do not use durable knowledge as a substitute for progress tracking.
+具体禁止行为：
+- 禁止把临时调试状态直接写进根级入口文件。
+- 禁止把未验证结论沉淀为 reusable knowledge。
+- 禁止用 durable knowledge 代替 progress tracking。
 ```
 
-## `quality-gates.md` Template
+## `quality-gates.md` 模板
 
-Note: Organize by content type, not by tool. Every content type should be able to point to an external checklist or supplementary specification.
+说明：按内容类型组织，不按工具组织。每种内容都要能指向外部 checklist 或补充规范。
 
 ```md
 # Quality gates
@@ -183,9 +185,10 @@ Required checks:
 - Unresolved critical risks block handoff.
 ```
 
-## `verification.md` Template
+## `verification.md` 模板
 
-Note: This file specifically addresses anti-rationalization. It does not describe best practices — it only describes what does not count as verification and the required PASS/FAIL output format.
+说明：这个文件专门处理反合理化。它不讲“最好怎么做”，只讲“什么不算验证”以及
+PASS/FAIL 输出格式。
 
 ```md
 # Verification rules
@@ -229,9 +232,9 @@ FAIL is mandatory when:
 - A blocking issue or unresolved risk remains.
 ```
 
-## Setup Order
+## 使用顺序
 
-1. Write `rules.md` first — define the behavior baseline.
-2. Then add `dont.md` — turn incidents into institution.
-3. Then write `quality-gates.md` — attach checks by output type.
-4. Finally write `verification.md` — close the loop on self-convincing passes.
+1. 先写 `rules.md`，定义行为基线。
+2. 再补 `dont.md`，把事故写成制度。
+3. 然后写 `quality-gates.md`，按输出类型挂检查。
+4. 最后写 `verification.md`，堵住“自我说服式通过”。

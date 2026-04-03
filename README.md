@@ -1,3 +1,5 @@
+[中文](./README.zh.md)
+
 # cc-harness
 
 > Harness Engineering audit tool + toolkit for AI coding agents, distilled from Claude Code source architecture.
@@ -16,29 +18,39 @@ Total score: **/100**, with per-dimension breakdown and remediation links.
 
 ## Quick Start
 
-### As a Claude Code plugin (recommended)
+### Via Claude Code marketplace (recommended)
 
-Enable in your Claude Code settings:
+```bash
+# Add the marketplace
+/plugin marketplace add auto-research/cc-harness
 
-```jsonc
-// .claude/settings.json
-{
-  "enabledPlugins": {
-    "cc-harness@auto-research": true
-  }
-}
+# Install the plugin
+/plugin install cc-harness@cc-harness
 ```
 
 Then run `/harness-audit` in any project.
 
+### Via settings.json
+
+```jsonc
+// .claude/settings.json
+{
+  "extraKnownMarketplaces": {
+    "cc-harness": {
+      "source": { "source": "github", "repo": "auto-research/cc-harness" }
+    }
+  },
+  "enabledPlugins": {
+    "cc-harness@cc-harness": true
+  }
+}
+```
+
 ### Manual skill install
 
 ```bash
-# Clone and install the skill
 git clone https://github.com/auto-research/cc-harness.git
 cp -r cc-harness/skills/harness-audit ~/.claude/skills/harness-audit
-
-# Run in your project — type: /harness-audit
 ```
 
 ### Global npm install

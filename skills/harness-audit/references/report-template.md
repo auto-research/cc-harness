@@ -76,7 +76,7 @@ Each dimension row follows this format:
   P{n}  {name_padded}  {bar}  {score}/10  {status}
 ```
 
-- `{name_padded}`: dimension name padded to 12 characters (Chinese characters count as 2)
+- `{name_padded}`: dimension name padded to 24 characters
 - `{bar}`: 10-character bar using `█` for filled and `░` for empty, proportional to score/10
 - `{score}`: total score for this dimension (script + LLM, 0-10)
 - `{status}`: PASS (>= 7), WARN (4-6), FAIL (<= 3)
@@ -130,37 +130,37 @@ The Markdown report is a full document written to the `--output` path.
 
 | Dimension | Name | Script | LLM | Total | Status |
 |-----------|------|--------|-----|-------|--------|
-| P1 | 约束制度化 | {s}/5 | {l}/5 | {t}/10 | {status} |
-| P2 | 控制面分层 | {s}/5 | {l}/5 | {t}/10 | {status} |
+| P1 | Constraint Codification | {s}/5 | {l}/5 | {t}/10 | {status} |
+| P2 | Control Plane Layering | {s}/5 | {l}/5 | {t}/10 | {status} |
 | ... | ... | ... | ... | ... | ... |
 
 ---
 
 ## Dimension Details
 
-### P1 约束制度化 (Constraint Codification)
+### P1 Constraint Codification
 
-**Principle**: 模型是不稳定部件
+**Principle**: Model is an unstable component
 
 **Script Checks** ({script_score}/5):
 
 | # | Check | Result | Detail |
 |---|-------|--------|--------|
-| 1 | 禁令文件存在 | PASS | governance/dont.md |
-| 2 | 条目数 >= 3 | PASS | 5 条规则 |
-| 3 | 非空内容 > 200 字 | PASS | — |
-| 4 | 有结构化格式 | PASS | 每条有 ## 标题 |
-| 5 | 文件被 git 追踪 | FAIL | untracked |
+| 1 | Prohibition file exists | PASS | governance/dont.md |
+| 2 | Item count >= 3 | PASS | 5 rules |
+| 3 | Non-empty content > 200 chars | PASS | — |
+| 4 | Structured format | PASS | Each item has ## heading |
+| 5 | File is git-tracked | FAIL | untracked |
 
 **LLM Evaluation** ({llm_score}/5):
 
 | # | Criterion | Result | Justification |
 |---|-----------|--------|---------------|
-| 1 | 触发场景具体 | PASS | Each rule opens with a specific trigger ("before publishing...") |
-| 2 | 来源教训真实 | PASS | References 2026-02-16 incident with specific details |
-| 3 | 禁止行为可操作 | PASS | "Don't publish without running data-verification-checklist.md" |
-| 4 | 规则无重复 | PASS | 5 rules cover 5 distinct failure modes |
-| 5 | 覆盖高频事故 | FAIL | Missing rule for secret leak prevention |
+| 1 | Specific trigger scenarios | PASS | Each rule opens with a specific trigger ("before publishing...") |
+| 2 | Traceable lessons | PASS | References 2026-02-16 incident with specific details |
+| 3 | Actionable prohibitions | PASS | "Don't publish without running data-verification-checklist.md" |
+| 4 | No overlapping rules | PASS | 5 rules cover 5 distinct failure modes |
+| 5 | Covers high-frequency incidents | FAIL | Missing rule for secret leak prevention |
 
 *(Repeat for all 10 dimensions)*
 
@@ -184,16 +184,16 @@ The Markdown report is a full document written to the `--output` path.
 
 | Dimension | Recommended Template | Section |
 |-----------|---------------------|---------|
-| P1 约束制度化 | toolkit/team/governance-starter.md | dont.md section |
-| P2 控制面分层 | toolkit/team/claude-md-template.md | Three-layer structure |
-| P3 工作流连续性 | toolkit/team/workflow-template.md | Full workflow |
-| P4 工具治理 | toolkit/team/hooks-starter.md | Four hook types |
-| P5 上下文预算 | toolkit/team/claude-md-template.md | Directory-level section |
-| P6 错误路径 | toolkit/team/hooks-starter.md | PostToolUse section |
-| P7 中断恢复 | toolkit/team/workflow-template.md | Progress section |
-| P8 角色分离 | toolkit/team/agent-roles-template.md | Three preset roles |
-| P9 验证独立 | toolkit/team/governance-starter.md | Verification section |
-| P10 团队制度 | toolkit/team/governance-starter.md | Rules + quality-gates section |
+| P1 Constraint Codification | toolkit/team/governance-starter.md | dont.md section |
+| P2 Control Plane Layering | toolkit/team/claude-md-template.md | Three-layer structure |
+| P3 Workflow Continuity | toolkit/team/workflow-template.md | Full workflow |
+| P4 Tool Governance | toolkit/team/hooks-starter.md | Four hook types |
+| P5 Context Budget | toolkit/team/claude-md-template.md | Directory-level section |
+| P6 Error Path | toolkit/team/hooks-starter.md | PostToolUse section |
+| P7 Interruption Recovery | toolkit/team/workflow-template.md | Progress section |
+| P8 Role Separation | toolkit/team/agent-roles-template.md | Three preset roles |
+| P9 Independent Verification | toolkit/team/governance-starter.md | Verification section |
+| P10 Team Institution | toolkit/team/governance-starter.md | Rules + quality-gates section |
 
 ---
 
@@ -208,13 +208,13 @@ This table maps each dimension to the toolkit template that addresses it. Used b
 
 | Dimension | Template Path | Focus Area |
 |-----------|--------------|------------|
-| P1 约束制度化 | `toolkit/team/governance-starter.md` | dont.md section — explicit prohibition rules |
-| P2 控制面分层 | `toolkit/team/claude-md-template.md` | Three-layer structure: repo, directory, on-demand |
-| P3 工作流连续性 | `toolkit/team/workflow-template.md` | Step-based workflow with quality gates and progress tracking |
-| P4 工具治理 | `toolkit/team/hooks-starter.md` | PreToolUse, PostToolUse, UserPromptSubmit, Stop hooks |
-| P5 上下文预算 | `toolkit/team/claude-md-template.md` | Directory-level entry files and token budget strategy |
-| P6 错误路径 | `toolkit/team/hooks-starter.md` | PostToolUse lint/typecheck hooks and escalation paths |
-| P7 中断恢复 | `toolkit/team/workflow-template.md` | Progress template with frontmatter and resume guidance |
-| P8 角色分离 | `toolkit/team/agent-roles-template.md` | Role definitions with tools, knowledge, and constraints |
-| P9 验证独立 | `toolkit/team/governance-starter.md` | Verification section with anti-rationalization rules |
-| P10 团队制度 | `toolkit/team/governance-starter.md` | Rules, quality-gates, and maintenance mechanism |
+| P1 Constraint Codification | `toolkit/team/governance-starter.md` | dont.md section — explicit prohibition rules |
+| P2 Control Plane Layering | `toolkit/team/claude-md-template.md` | Three-layer structure: repo, directory, on-demand |
+| P3 Workflow Continuity | `toolkit/team/workflow-template.md` | Step-based workflow with quality gates and progress tracking |
+| P4 Tool Governance | `toolkit/team/hooks-starter.md` | PreToolUse, PostToolUse, UserPromptSubmit, Stop hooks |
+| P5 Context Budget | `toolkit/team/claude-md-template.md` | Directory-level entry files and token budget strategy |
+| P6 Error Path | `toolkit/team/hooks-starter.md` | PostToolUse lint/typecheck hooks and escalation paths |
+| P7 Interruption Recovery | `toolkit/team/workflow-template.md` | Progress template with frontmatter and resume guidance |
+| P8 Role Separation | `toolkit/team/agent-roles-template.md` | Role definitions with tools, knowledge, and constraints |
+| P9 Independent Verification | `toolkit/team/governance-starter.md` | Verification section with anti-rationalization rules |
+| P10 Team Institution | `toolkit/team/governance-starter.md` | Rules, quality-gates, and maintenance mechanism |

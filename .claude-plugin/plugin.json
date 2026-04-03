@@ -1,0 +1,11 @@
+{
+  "name": "cc-harness",
+  "description": "Harness Engineering audit tool + toolkit for AI coding agents. Dual-layer evaluation: deterministic script (50pts) + LLM semantic analysis (50pts). Distilled from Claude Code source architecture.",
+  "version": "0.1.1",
+  "author": {
+    "name": "auto-research"
+  },
+  "homepage": "https://github.com/auto-research/cc-harness",
+  "repository": "https://github.com/auto-research/cc-harness",
+  "license": "MIT"
+}

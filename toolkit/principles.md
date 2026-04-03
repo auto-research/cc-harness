@@ -1,5 +1,5 @@
 ---
-title: Harness Engineering 设计原则 — 从 Claude Code 和 Codex 源码提炼
+title: Harness Engineering Design Principles — Distilled from Claude Code and Codex Source
 domain: tech
 type: decision
 created: 2026-04-02
@@ -11,102 +11,104 @@ sources:
   - "@wquguru, Claude Code 和 Codex 的 Harness 设计哲学"
 ---
 
-# Harness Engineering 设计原则
+[中文版](./principles.zh.md)
 
-本文综合三份来源，提炼 AI coding agent 的 harness 设计原则。
+# Harness Engineering Design Principles
 
-## 核心立场
+This document synthesizes three source materials to distill harness design principles for AI coding agents.
 
-> Prompt 决定它怎么说话，Harness 决定它怎么做事。
+## Core Position
 
-Harness 不是附属工具，是模型进入工程环境的前提。缺少这层约束，风险最终转移给用户、团队和维护者。
+> Prompt decides how it talks. Harness decides how it acts.
 
-## 十条原则
+The harness is not a supplementary tool — it is the prerequisite for a model to operate in an engineering environment. Without this layer of constraint, risk ultimately transfers to users, teams, and maintainers.
 
-### 1. 把模型当不稳定部件，不要当同事
+## Ten Principles
 
-模型会犯错、会忘记上下文、会把语气里的自信和结论里的正确性混为一谈。系统必须围绕这个事实设计。
+### 1. Treat the Model as an Unstable Component, Not a Colleague
 
-**落地映射**: `governance/dont.md` — 把教训写成制度，不靠模型临场发挥。
+Models make mistakes, lose context, and conflate the confidence of their tone with the correctness of their conclusions. Systems must be designed around this fact.
 
-### 2. Prompt 是控制面的一部分，不是人格装饰
+**Implementation mapping**: `governance/dont.md` — encode lessons as institutional rules, not ad-hoc model judgment.
 
-Prompt 在 agent 里不是人设文案，而是分层拼装的行为区块。真正起作用的是优先级链：override > coordinator > agent > custom > default。
+### 2. Prompt Is Part of the Control Plane, Not Personality Decoration
 
-**落地映射**: `CLAUDE.md` 精简为 26 行入口，指向 governance/ 和 knowledge/，不堆砌描述。
+In an agent, the prompt is not character copy — it is a layered assembly of behavior blocks. What actually matters is the priority chain: override > coordinator > agent > custom > default.
 
-### 3. Query loop 才是代理系统的心跳
+**Implementation mapping**: `CLAUDE.md` trimmed to a 26-line entry point that delegates to `governance/` and `knowledge/` — no descriptive padding.
 
-一个代理系统是否成熟，先看它有没有循环。状态属于主业务：预算概念、恢复概念、上下文膨胀后的自救机制、工具调用失败后继续推进的能力。
+### 3. The Query Loop Is the Heartbeat of an Agent System
 
-**落地映射**: `workflows/` 每个工作流有步骤编号 + quality gate + progress.md 中断恢复。
+The first sign of a mature agent system is whether it has a loop. State belongs to the main process: budget concepts, recovery concepts, self-rescue mechanisms when context bloats, and the ability to keep moving after a tool call fails.
 
-### 4. 工具是受管执行接口
+**Implementation mapping**: Each workflow in `workflows/` has step numbers + quality gates + `progress.md` for interrupt recovery.
 
-工具调用不是"模型说调就调"。中间要经过输入校验、权限检查、风险预判、执行、后处理。能力越强，约束越细。Bash 最危险。
+### 4. Tools Are Managed Execution Interfaces
 
-**落地映射**: `.claude/settings.json` hooks — PreToolUse 拦截敏感命令，PostToolUse 即时检查。
+Tool invocation is not "call whatever the model says." In between: input validation, permission checks, risk assessment, execution, and post-processing. The more capable the tool, the finer the constraints. Bash is the most dangerous.
 
-### 5. 上下文是工作内存，不是垃圾桶
+**Implementation mapping**: `.claude/settings.json` hooks — PreToolUse intercepts sensitive commands, PostToolUse checks immediately after.
 
-每个 token 都有成本。能缓存的要缓存，能按需加载的不要一开始就塞进去，能压缩的要压缩。CLAUDE.md 是长期指令，memory 是短期缓冲，不能混在一起。
+### 5. Context Is Working Memory, Not a Trash Can
 
-**落地映射**: `knowledge/` 按域分层，只加载当前任务需要的域。memory 定位为短期缓冲，长期知识由 librarian 迁移到 knowledge/。
+Every token has a cost. Cache what can be cached, load on demand what doesn't need to be front-loaded, compress what can be compressed. `CLAUDE.md` carries long-term instructions; memory is a short-term buffer — they must not be conflated.
 
-### 6. 错误路径就是主路径
+**Implementation mapping**: `knowledge/` organized by domain with layered loading — only load the domain needed for the current task. Memory is treated as short-term buffer; long-term knowledge is migrated by librarian into `knowledge/`.
 
-代理系统的失败不是偶发的，它是稳定存在的：prompt too long、max_output_tokens、工具拒绝、用户打断、hook 阻塞、API 重试。这些都要按主路径来处理。
+### 6. The Error Path Is the Main Path
 
-**落地映射**: `governance/verification.md` — 反合理化规则，不让"看起来没问题"冒充验证。
+Failures in agent systems are not sporadic — they are stable and recurrent: prompt too long, max_output_tokens, tool rejection, user interruption, hook blocking, API retries. All of these must be treated as main-path concerns.
 
-### 7. 恢复的目标是继续工作
+**Implementation mapping**: `governance/verification.md` — anti-rationalization rules that prevent "looks fine" from passing as verification.
 
-恢复不是回滚到初始状态，而是以续写为主。中断后的下一个 session 应该能从 progress.md 接着跑。
+### 7. The Goal of Recovery Is to Continue Working
 
-**落地映射**: `templates/workflow-progress.md` — 标准进度文件，每个多步骤工作流自动维护。
+Recovery is not rolling back to the initial state — it is primarily about resumption. The next session after an interruption should be able to pick up from `progress.md` and keep going.
 
-### 8. 多代理要靠角色分离，不靠人海战术
+**Implementation mapping**: `templates/workflow-progress.md` — standard progress file maintained automatically by every multi-step workflow.
 
-多代理的真正价值在于职责分区和独立验证。写代码的人不应该是验代码的人。
+### 8. Multi-Agent Systems Depend on Role Separation, Not Headcount
 
-**落地映射**: `agents/` 5 个角色各有 knowledge_access 和 tools 约束。librarian 只读。
+The real value of multi-agent systems lies in responsibility partitioning and independent verification. The person writing the code should not be the one verifying it.
 
-### 9. 验证必须独立，不能让系统自己给自己打分
+**Implementation mapping**: `agents/` — 5 roles each with `knowledge_access` and `tools` constraints. Librarian is read-only.
 
-验证必须独立于实现阶段。"代码看起来对的"不是验证，"AI 已经检查过了"不是独立审查。
+### 9. Verification Must Be Independent — the System Cannot Grade Itself
 
-**落地映射**: `governance/verification.md` 四条反合理化规则 + `governance/quality-gates.md` 按内容类型的强制检查。
+Verification must be independent from the implementation phase. "The code looks correct" is not verification. "AI already checked it" is not independent review.
 
-### 10. 团队制度比个人技巧重要
+**Implementation mapping**: `governance/verification.md` — four anti-rationalization rules + `governance/quality-gates.md` — mandatory checks by content type.
 
-个人能用不等于团队能承受。skill 是可复用的制度切片，hook 把制度挂到生命周期，approval 用来划责任边界。
+### 10. Team Institution Matters More Than Individual Skill
 
-**落地映射**: 整个 governance/ 层 — 规则、禁令、门禁、hooks 都是制度而非个人偏好。
+Usable by one person does not mean sustainable for a team. Skills are reusable institutional slices; hooks attach institutions to lifecycle events; approvals draw responsibility boundaries.
 
-## Claude Code vs Codex：两种驯化路线
+**Implementation mapping**: The entire `governance/` layer — rules, prohibitions, gates, and hooks are all institutional, not personal preferences.
 
-| 维度 | Claude Code | Codex |
-|------|-------------|-------|
-| 气质 | 运行时纪律先落地（runtime discipline） | 制度层先设防（policy and local rules） |
-| 控制面 | 动态 prompt 装配线 | 带编号的 instruction fragment 公文系统 |
-| 连续性 | 压进 query loop 主循环 | 拆进 thread/rollout/state bridge |
-| 工具治理 | 运行时编排 + 危险动作约束 | schema + approval policy + sandbox |
-| 本地规则 | CLAUDE.md 让现场规则进入会话 | AGENTS.md 让现场规则进入制度 |
-| 多代理 | 运行时职责分区，验证独立于实现 | 显式委派 + 持久状态 + 工具化协作 |
+## Claude Code vs Codex: Two Approaches to Taming Models
 
-**殊途同归之处**: 都知道模型不可信，真正可信的只能是约束结构。
+| Dimension | Claude Code | Codex |
+|-----------|-------------|-------|
+| Disposition | Runtime discipline first | Policy and local rules first |
+| Control plane | Dynamic prompt assembly pipeline | Numbered instruction fragment document system |
+| Continuity | Embedded in the query loop | Split across thread/rollout/state bridge |
+| Tool governance | Runtime orchestration + dangerous-action constraints | Schema + approval policy + sandbox |
+| Local rules | CLAUDE.md brings local rules into the session | AGENTS.md brings local rules into the institution |
+| Multi-agent | Runtime responsibility partitioning, verification independent of implementation | Explicit delegation + persistent state + tool-based coordination |
 
-**各表一枝之处**: Claude Code 从运行时事故经验长出来，优先解决连续性和现场治理；Codex 从显式结构设计长出来，优先解决控制层命名、策略表达和可组合性。
+**Where they converge**: Both acknowledge that models cannot be trusted. Only the constraint structure can be.
 
-## 落地建议
+**Where they diverge**: Claude Code grew from runtime incident experience, prioritizing continuity and on-site governance. Codex grew from explicit structural design, prioritizing control-plane naming, policy expression, and composability.
 
-一种经过验证的**混合路线**：
+## Implementation Guidance
 
-- **知识分层加载**（原则 5）→ 按域组织知识，按需加载
-- **行为写成制度**（原则 1、10）→ governance 独立于知识层
-- **角色分离**（原则 8、9）→ 每个 agent 有约束，验证角色只读
-- **中断恢复**（原则 7）→ workflow 定义 + progress 追踪
-- **工具治理**（原则 4）→ hooks 自动检查
-- **验证独立**（原则 9）→ 反合理化规则
+A validated **hybrid approach**:
 
-后来者不该照抄产品，而该识别自己的主要不确定性在哪，然后决定秩序安放的位置。
+- **Layered knowledge loading** (Principle 5) → organize knowledge by domain, load on demand
+- **Behavior as institution** (Principles 1, 10) → governance independent of the knowledge layer
+- **Role separation** (Principles 8, 9) → each agent is constrained, verification roles are read-only
+- **Interrupt recovery** (Principle 7) → workflow definitions + progress tracking
+- **Tool governance** (Principle 4) → automated checks via hooks
+- **Independent verification** (Principle 9) → anti-rationalization rules
+
+Rather than copying any product directly, later practitioners should identify their primary sources of uncertainty and decide where to place the ordering.

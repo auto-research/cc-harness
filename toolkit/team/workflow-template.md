@@ -1,5 +1,7 @@
+[中文版](./workflow-template.zh.md)
+
 ---
-title: Workflow 模板与 progress 跟踪
+title: Workflow Template and Progress Tracking
 domain: tech
 type: template
 created: 2026-04-02
@@ -7,14 +9,13 @@ updated: 2026-04-02
 tags: [harness-engineering, workflow, progress, template, team]
 ---
 
-# Workflow 模板与 progress 跟踪
+# Workflow Template and Progress Tracking
 
-这份模板服务原则 3、7、8、9：query loop 才是代理系统的心跳，中断后要能续跑，
-实现与验证要分角色，工作流必须显式挂上质量门禁。
+This template serves principles 3, 7, 8, and 9: the query loop is the heartbeat of an agent system, interrupted work must be resumable, implementation and verification must belong to separate roles, and workflows must have explicit quality gates attached.
 
-## Workflow definition 模板
+## Workflow Definition Template
 
-下面是可复制的 `workflows/<name>.md` 模板。YAML frontmatter 统一包含：
+Below is a copyable `workflows/<name>.md` template. The YAML frontmatter consistently includes:
 
 - `name`
 - `description`
@@ -25,7 +26,7 @@ tags: [harness-engineering, workflow, progress, template, team]
 ```md
 ---
 name: <workflow-name>
-description: <这个工作流解决什么问题，输出什么结果>
+description: <What problem this workflow solves and what it produces>
 agents:
   - <agent-1>
   - <agent-2>
@@ -45,52 +46,52 @@ steps:
 
 ## Goal
 
-写明最终交付物、验收标准和阻塞条件。
+State the final deliverable, acceptance criteria, and blocking conditions.
 
 ## Inputs
 
-- 必需输入 1
-- 必需输入 2
+- Required input 1
+- Required input 2
 
 ## Outputs
 
-- 产出 1
-- 产出 2
+- Output 1
+- Output 2
 
 ## Step 1: <step-name>
 
 Owner: <role>
 
 Actions:
-1. 写明要做的动作。
-2. 写明需要读取的知识或规则。
-3. 写明本步骤完成判定。
+1. Describe the action to take.
+2. Describe the knowledge or rules to read.
+3. Describe how to determine this step is complete.
 
 Quality gate:
-- 对应的检查项或外部 checklist
+- The corresponding check or external checklist
 
 Update progress:
-- 完成后更新 `progress.md` 的 `current_step`、`last_updated` 和已完成清单。
+- After completion, update `progress.md` with `current_step`, `last_updated`, and the completed checklist.
 
 ## Step 2: <step-name>
 
 Owner: <role>
 
 Actions:
-1. 写明要做的动作。
-2. 写明需要保留的证据。
-3. 写明本步骤完成判定。
+1. Describe the action to take.
+2. Describe the evidence to preserve.
+3. Describe how to determine this step is complete.
 
 Quality gate:
-- 对应的检查项或外部 checklist
+- The corresponding check or external checklist
 
 Update progress:
-- 完成后同步进度，并记录下一步最小动作。
+- Sync progress after completion and record the minimum next action.
 ```
 
-## `progress.md` 模板
+## `progress.md` Template
 
-下面是中断恢复用的跟踪模板。frontmatter 必须包含：
+Below is a tracking template for interrupted-session recovery. The frontmatter must include:
 
 - `workflow`
 - `slug`
@@ -122,22 +123,22 @@ total_steps: 4
 
 ## Next action
 
-写明恢复工作时的下一个最小动作，不要写抽象口号。
+Describe the minimum next action when resuming — no abstract slogans.
 
 ## Context for resume
 
-- 当前已确认的事实
-- 尚未解决的阻塞项
-- 需要读取的文件或日志
-- 验证状态和缺口
+- Currently confirmed facts
+- Unresolved blockers
+- Files or logs to read
+- Verification status and gaps
 ```
 
-## 完整示例：feature development workflow
+## Complete Example: Feature Development Workflow
 
 ```md
 ---
 name: feature-development
-description: 从需求澄清到实现、审查、验证与交付的标准功能开发工作流。
+description: Standard feature development workflow from requirements clarification through implementation, review, verification, and handoff.
 agents:
   - architect
   - implementer
@@ -164,89 +165,89 @@ steps:
 
 ## Goal
 
-交付一个满足验收标准、带独立验证证据、可从中断状态恢复的功能改动。
+Deliver a feature change that satisfies acceptance criteria, carries independent verification evidence, and can be resumed from an interrupted state.
 
 ## Inputs
 
-- 明确的用户需求
-- 相关领域知识与治理文件
-- 当前代码与测试上下文
+- A clear user requirement
+- Relevant domain knowledge and governance files
+- Current code and test context
 
 ## Outputs
 
-- 已实现改动
-- 更新后的 `progress.md`
-- 独立验证结论
+- Implemented change
+- Updated `progress.md`
+- Independent verification conclusion
 
 ## Step 1: scope and acceptance
 
 Owner: architect
 
 Actions:
-1. 定义范围、非范围和可观察验收标准。
-2. 识别涉及的模块、边界和风险。
-3. 判断是否需要拆分成更小切片。
+1. Define scope, out-of-scope, and observable acceptance criteria.
+2. Identify the modules, boundaries, and risks involved.
+3. Determine whether the work needs to be split into smaller slices.
 
 Quality gate:
-- 验收标准可测试。
-- 风险与回滚路径已写明。
+- Acceptance criteria are testable.
+- Risks and rollback path are written down.
 
 Update progress:
-- 将 `current_step` 更新为 2。
-- 在 `Context for resume` 记录批准范围和阻塞项。
+- Update `current_step` to 2.
+- Record approved scope and blockers in `Context for resume`.
 
 ## Step 2: implement minimal slice
 
 Owner: implementer
 
 Actions:
-1. 从最小可用切片开始实现。
-2. 每完成一段即运行对应 lint/typecheck/test。
-3. 保持 `progress.md` 与当前状态一致。
+1. Start implementation from the smallest viable slice.
+2. Run the corresponding lint/typecheck/test after each segment.
+3. Keep `progress.md` in sync with the current state.
 
 Quality gate:
-- 实现不越界。
-- 中间验证命令有证据。
+- Implementation stays within scope.
+- Intermediate verification commands have evidence.
 
 Update progress:
-- 勾选已完成步骤。
-- 写清楚 reviewer 下一步要验证什么。
+- Check off completed steps.
+- Write clearly what the reviewer needs to verify next.
 
 ## Step 3: run verification
 
 Owner: reviewer
 
 Actions:
-1. 独立运行 lint/typecheck/test 或内容型 gate。
-2. 优先查找行为回归、证据缺口和遗漏风险。
-3. 以 PASS/FAIL 格式输出结论。
+1. Independently run lint/typecheck/test or content-type gates.
+2. Prioritize finding behavioral regressions, evidence gaps, and missed risks.
+3. Output conclusions in PASS/FAIL format.
 
 Quality gate:
 - `governance/verification.md`
 - `governance/quality-gates.md`
 
 Update progress:
-- 将 `status` 更新为 `verified` 或 `blocked`。
-- 在 `Context for resume` 记录失败原因或剩余风险。
+- Update `status` to `verified` or `blocked`.
+- Record failure reasons or remaining risks in `Context for resume`.
 
 ## Step 4: package handoff
 
 Owner: implementer
 
 Actions:
-1. 根据 Reviewer 结果修复或整理交付说明。
-2. 汇总验收标准、风险和验证结论。
-3. 准备 handoff 或提交。
+1. Fix issues or finalize the handoff summary based on Reviewer's findings.
+2. Summarize acceptance criteria, risks, and verification conclusions.
+3. Prepare for handoff or commit.
 
 Quality gate:
-- 不允许跳过失败项直接 handoff。
-- 交付说明必须引用验证结果。
+- Handoff is not allowed while any failure items remain unresolved.
+- Handoff summary must reference verification results.
 
 Update progress:
-- 全部完成后将 `status` 改为 `done`。
+- Set `status` to `done` when all steps are complete.
 ```
 
-### 对应的 `progress.md` 示例
+### Corresponding `progress.md` Example
 
 ```md
 ---
@@ -270,18 +271,18 @@ total_steps: 4
 
 ## Next action
 
-完成模板文件初稿后，运行自检并整理给 Reviewer 的验证范围。
+After completing the initial draft of template files, run a self-check and prepare the verification scope for the Reviewer.
 
 ## Context for resume
 
-- 已确认范围：新增 7 个 team-level Harness Engineering 模板文件。
-- 关键约束：所有文件必须有 frontmatter，正文以中文为主，hooks 示例需完整可复制。
-- 待验证项：hooks JSON 结构、shell 脚本可读性、原则映射覆盖。
-- 风险：如果没有 progress 跟踪，中断后容易丢失“当前做到第几步”的状态。
+- Confirmed scope: add 7 team-level Harness Engineering template files.
+- Key constraints: all files must have frontmatter, body text is primarily in Chinese, hooks examples must be complete and copyable.
+- Items pending verification: hooks JSON structure, shell script readability, principle mapping coverage.
+- Risk: without progress tracking, it is easy to lose track of "which step we were on" after an interruption.
 ```
 
-## 使用建议
+## Usage Recommendations
 
-- 每个超过 2 步的工作流都应有配套 `progress.md`。
-- 每次中断前，至少更新一次 `Next action`。
-- Reviewer 不修改实现，只更新验证结论或要求修复。
+- Every workflow with more than 2 steps should have a corresponding `progress.md`.
+- Before every interruption, update `Next action` at least once.
+- The Reviewer does not modify the implementation — only updates the verification conclusion or requests a fix.

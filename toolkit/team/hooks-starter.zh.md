@@ -1,7 +1,5 @@
-[中文版](./hooks-starter.zh.md)
-
 ---
-title: Claude Hooks Starter Templates
+title: Claude hooks 启动模板
 domain: tech
 type: template
 created: 2026-04-02
@@ -9,18 +7,20 @@ updated: 2026-04-02
 tags: [harness-engineering, claude-code, hooks, template, team]
 ---
 
-# Claude Hooks Starter Templates
+# Claude hooks 启动模板
 
-This set of starter hooks brings principles 4, 6, 7, and 10 into the Claude Code lifecycle:
+这组 starter hooks 把原则 4、6、7、10 落到 Claude Code 生命周期里：
 
-- Tools are managed execution interfaces
-- The error path is the main path
-- Recovery means getting back to work
-- Team institution must be enforced automatically, not by memory
+- 工具是受管执行接口
+- 错误路径就是主路径
+- 恢复的目标是继续工作
+- 团队制度必须自动挂钩，而不是靠人记
 
-The content below follows the official Claude Code hooks/settings structure and can be copied directly into `.claude/settings.json` and `.claude/hooks/*.sh`. Scripts depend on `jq` and a standard Node toolchain.
+下面内容按 Claude Code 官方 hooks/settings 结构编写，可直接复制到
+`.claude/settings.json` 与 `.claude/hooks/*.sh`。脚本依赖 `jq` 与常见 Node
+工具链。
 
-## `.claude/settings.json` Complete Hooks Block
+## `.claude/settings.json` 完整 hooks block
 
 ```json
 {
@@ -74,16 +74,16 @@ The content below follows the official Claude Code hooks/settings structure and 
 }
 ```
 
-## Hook 1: UserPromptSubmit Health Check
+## Hook 1: UserPromptSubmit health check
 
-Purpose:
+用途：
 
-- Inject repo health context on every prompt submission
-- Run `git status`
-- Attempt `typecheck`
-- Detect dirty state left behind by an interrupted session
+- 每次提交 prompt 时注入 repo health context
+- 执行 `git status`
+- 尝试执行 `typecheck`
+- 识别上次 session 中断后留下的 dirty state
 
-Script path: `.claude/hooks/user-prompt-health-check.sh`
+脚本路径：`.claude/hooks/user-prompt-health-check.sh`
 
 ```bash
 #!/usr/bin/env bash
@@ -153,15 +153,15 @@ jq -n \
   }'
 ```
 
-## Hook 2: PreToolUse Write Guard
+## Hook 2: PreToolUse Write guard
 
-Purpose:
+用途：
 
-- Inject package-specific constraints based on `file_path`
-- Turn directory rules into runtime constraints
-- Prevent missing local boundaries before a write
+- 根据 `file_path` 注入 package-specific constraints
+- 把目录规则变成运行时约束
+- 避免在写入前遗漏局部边界
 
-Script path: `.claude/hooks/write-guard.sh`
+脚本路径：`.claude/hooks/write-guard.sh`
 
 ```bash
 #!/usr/bin/env bash
@@ -203,15 +203,15 @@ jq -n \
   }'
 ```
 
-## Hook 3: PreToolUse Bash Guard
+## Hook 3: PreToolUse Bash guard
 
-Purpose:
+用途：
 
-- Intercept high-risk shell behaviors
-- Block publish, force-push, and `rm -rf` by default
-- Turn principles 4 and 10 into machine-enforceable boundaries
+- 拦截高风险 shell 行为
+- 默认阻止发布、force-push、`rm -rf`
+- 把原则 4 和原则 10 变成机器可执行的边界
 
-Script path: `.claude/hooks/bash-guard.sh`
+脚本路径：`.claude/hooks/bash-guard.sh`
 
 ```bash
 #!/usr/bin/env bash
@@ -252,15 +252,15 @@ else
 fi
 ```
 
-## Hook 4: PostToolUse Write Lint
+## Hook 4: PostToolUse Write lint
 
-Purpose:
+用途：
 
-- Run `eslint` on modified `.ts` / `.tsx` files after a write
-- Feed lint failures back to Claude immediately
-- Surface errors as early as possible rather than letting them accumulate until the end
+- 在写入后对已修改的 `.ts` / `.tsx` 文件执行 `eslint`
+- 将 lint 失败立即反馈给 Claude
+- 让错误路径尽早暴露，而不是堆到最后统一爆炸
 
-Script path: `.claude/hooks/post-write-lint.sh`
+脚本路径：`.claude/hooks/post-write-lint.sh`
 
 ```bash
 #!/usr/bin/env bash
@@ -328,17 +328,17 @@ else
 fi
 ```
 
-## Activation Steps
+## 启用步骤
 
-1. Create the directory: `.claude/hooks/`
-2. Save each script above to its corresponding path.
-3. Run: `chmod +x .claude/hooks/*.sh`
-4. Merge the hooks block into `.claude/settings.json`
-5. Run `/hooks` in Claude Code to confirm registration
+1. 创建目录：`.claude/hooks/`
+2. 将以上脚本分别保存到对应路径。
+3. 执行：`chmod +x .claude/hooks/*.sh`
+4. 将 hooks block 合并进 `.claude/settings.json`
+5. 在 Claude Code 中运行 `/hooks` 确认已注册
 
-## Design Intent
+## 设计意图
 
-- Hook 1 corresponds to principle 7: detects dirty state after an interruption and guides recovery.
-- Hook 2 corresponds to principles 5 and 10: directory constraints are injected on demand and driven by institution.
-- Hook 3 corresponds to principle 4: brings dangerous Bash operations under governance.
-- Hook 4 corresponds to principle 6: exposes lint failures immediately after a write — no "write now, check later."
+- Hook 1 对应原则 7：检测中断后的 dirty state，并引导恢复。
+- Hook 2 对应原则 5 和原则 10：目录约束按需注入，且由制度驱动。
+- Hook 3 对应原则 4：把危险 Bash 操作纳入治理。
+- Hook 4 对应原则 6：写完即暴露 lint 失败，不允许“先写再说”。

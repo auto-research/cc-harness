@@ -1,5 +1,7 @@
+[中文版](./multi-agent-patterns.zh.md)
+
 ---
-title: Multi-agent 模式参考
+title: Multi-Agent Patterns Reference
 domain: tech
 type: reference
 created: 2026-04-02
@@ -7,81 +9,69 @@ updated: 2026-04-02
 tags: [harness-engineering, enterprise-agent]
 ---
 
-# Multi-agent 模式参考
+# Multi-Agent Patterns Reference
 
-企业系统里是否拆 agent，不该先问任务有多复杂，而该先问不确定性是否可以
-被分区。复杂但高度耦合的工作，拆 agent 往往只会制造 handoff 成本；不确定性
-来源清晰、证据域不同、验证需要独立性的工作，才是真正适合 multi-agent
-的对象。
+When deciding whether to split agents in an enterprise system, the first question should not be "how complex is the task?" but "can the uncertainty be partitioned?" Work that is complex but tightly coupled will often produce nothing but handoff overhead when split into agents. Work where the sources of uncertainty are distinct, the evidence domains differ, and verification requires independence — that is what multi-agent is actually suited for.
 
-## 何时拆 agent
+## When to Split Agents
 
-最有效的判断标准不是复杂度，而是不确定性 partitioning。下面这张表可以
-直接拿来做 split 判断。
+The most effective decision criterion is not complexity but uncertainty partitioning. The table below can be used directly as a split-decision guide.
 
-| 情况 | 建议 | 原因 |
-|------|------|------|
-| 一个问题需要不同证据域，例如代码、文档、线上状态同时判断 | 拆 | 每个 agent 可携带更窄上下文 |
-| 一个问题需要独立验证，避免实现者自我说服 | 拆 | verifier 必须与 implementer 解耦 |
-| 一个问题只是文件很多，但决策高度耦合 | 不拆 | handoff 会放大上下文损耗 |
-| 一个问题可并行探索多个假设 | 拆 | 多个探索路径天然适合 fork |
-| 一个问题高度顺序化，下一步完全依赖上一步细节 | 谨慎 | coordinator 会成为瓶颈 |
+| Situation | Recommendation | Reason |
+|-----------|---------------|--------|
+| A problem requires different evidence domains — e.g., code, documentation, and live system state must be assessed simultaneously | Split | Each agent can carry a narrower context |
+| A problem requires independent verification to prevent the implementer from rationalizing their own work | Split | The verifier must be decoupled from the implementer |
+| A problem involves many files but highly coupled decisions | Do not split | Handoff amplifies context loss |
+| A problem allows parallel exploration of multiple hypotheses | Split | Multiple exploration paths are naturally suited to forking |
+| A problem is highly sequential, where each step depends entirely on the details of the previous step | Proceed with caution | The coordinator will become a bottleneck |
 
-## Fork path cache optimization
+## Fork Path Cache Optimization
 
-multi-agent 成本控制的关键，不是让更多 agent 并发，而是让它们的 fork path
-尽量长时间共享同一段 static prefix。主线程先放稳定规则、工具定义、
-项目约束，再按不同任务只追加最小的动态上下文。这样做的结果，是多个 agent
-共享 cache 命中，而不是每个 agent 各自烧一遍前缀 token。
+Cost control in multi-agent is not about running more agents concurrently — it is about keeping their fork paths sharing the same static prefix for as long as possible. The main thread should first anchor stable rules, tool definitions, and project constraints; then each agent appends only the minimal dynamic context for its specific task. The result is that multiple agents share cache hits rather than each burning through the prefix tokens independently.
 
-## Verification agent 设计
+## Verification Agent Design
 
-Verification Agent 的价值，不是“再看一遍”，而是用独立 prompt、
-只读工具和 anti-rationalization 规则，打断实现者的叙事惯性。
+The value of a Verification Agent is not "having another look" — it is using an independent prompt, read-only tools, and anti-rationalization rules to break the implementer's narrative momentum.
 
-| 设计点 | 建议 |
-|--------|------|
-| Prompt | 不复用 implementer 的目标叙事，改为“找证据判断是否通过” |
-| Tools | 默认只读：Read、Grep、test runner、browser verify、日志查看 |
-| Output | 强制 PASS / FAIL + evidence + open risks |
-| Constraints | 不允许修改源文件，不允许把“看起来对”当验证 |
-| Input | 只喂成果物、验收标准、必要上下文，不喂完整实现过程 |
+| Design point | Recommendation |
+|-------------|----------------|
+| Prompt | Do not reuse the implementer's goal narrative; reframe as "find evidence to determine whether this passes" |
+| Tools | Read-only by default: Read, Grep, test runner, browser verify, log viewer |
+| Output | Force PASS / FAIL + evidence + open risks |
+| Constraints | Not allowed to modify source files; not allowed to treat "looks right" as verification |
+| Input | Feed only the artifact, acceptance criteria, and necessary context — not the full implementation process |
 
-独立 verifier 的关键不是更聪明，而是更少被实现过程污染。验证是天然适合
-black-box 的任务，这也是它特别适合单独 agent 的原因。
+The key to an independent verifier is not being smarter — it is being less contaminated by the implementation process. Verification is naturally a black-box task, which is exactly why it is well-suited to a dedicated agent.
 
-## 从 Claude Code 可抽象的 5 类 task lifecycle
+## 5 Task Lifecycle Types Abstracted from Claude Code
 
-下面这五类 task type 适合作为企业 multi-agent 的最小生命周期模型。
-这里的命名是架构抽象，不必与具体产品内部 class 名一字不差。
+The five task types below are suitable as the minimum lifecycle model for enterprise multi-agent systems. The naming here is an architectural abstraction; it does not need to match any specific product's internal class names exactly.
 
-| task type | 目标 | 常见 owner |
-|-----------|------|------------|
-| discover | 找证据、建局部地图、缩小问题空间 | explorer / librarian |
-| plan | 明确方案、边界、风险和验收标准 | planner / architect |
-| implement | 产生改动、执行命令、推进主任务 | implementer / worker |
-| verify | 独立检查结果是否满足标准 | verifier / reviewer |
-| reconcile | 汇总结果、解决冲突、更新主叙事 | coordinator |
+| Task type | Goal | Typical owner |
+|-----------|------|---------------|
+| discover | Find evidence, build a local map, narrow the problem space | explorer / librarian |
+| plan | Clarify the approach, boundaries, risks, and acceptance criteria | planner / architect |
+| implement | Produce changes, execute commands, advance the primary task | implementer / worker |
+| verify | Independently check whether results meet the criteria | verifier / reviewer |
+| reconcile | Aggregate results, resolve conflicts, update the authoritative narrative | coordinator |
 
-这个生命周期的重点在于：verify 和 implement 是不同 task type，不是
-implement 的最后一步小尾巴。
+The key point of this lifecycle: `verify` and `implement` are different task types — not a small tail step at the end of `implement`.
 
-## Coordinator pattern
+## Coordinator Pattern
 
-Coordinator 不是“最强的 agent”，而是最克制的 agent。它的职责是维护主叙事、
-分发子任务、合并结果、裁决下一步，而不是自己下场把所有事情做完。
+The coordinator is not "the most powerful agent" — it is the most restrained agent. Its role is to maintain the authoritative narrative, dispatch sub-tasks, merge results, and decide what comes next. It does not step in to do everything itself.
 
-一个合格的 coordinator 至少要做四件事：
+A well-designed coordinator must do at least four things:
 
-1. 保存 authoritative task state。
-2. 明确每个 sub-agent 的输入、输出和工具边界。
-3. 在子任务返回后做 reconcile，而不是原样转发。
-4. 在 verify 失败时阻断推进，而不是帮 implementer 合理化。
+1. Maintain authoritative task state.
+2. Specify the input, output, and tool boundaries for each sub-agent.
+3. Perform reconciliation after sub-tasks return — not raw-forward their outputs.
+4. Block forward progress when verification fails — not rationalize on behalf of the implementer.
 
-## 企业设计建议
+## Enterprise Design Advice
 
-如果你想把 multi-agent 做得稳，而不是做得热闹，优先落地下面三点。
+If you want to build multi-agent systems that are stable rather than just impressive, prioritize these three things.
 
-1. 以不确定性分区做 split，而不是以文件数或步骤数做 split。
-2. 给 verifier 单独 prompt、单独工具集和单独输出模板。
-3. 让 coordinator 只拥有调度权和状态权，不默认拥有全部执行权。
+1. Split on uncertainty partitioning, not on file count or step count.
+2. Give the verifier its own prompt, its own tool set, and its own output template.
+3. Let the coordinator own scheduling authority and state authority — not full execution authority by default.

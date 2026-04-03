@@ -1,5 +1,7 @@
+[中文版](./claude-md-template.zh.md)
+
 ---
-title: CLAUDE.md 三层模板指南
+title: CLAUDE.md Three-Layer Template Guide
 domain: tech
 type: template
 created: 2026-04-02
@@ -7,48 +9,44 @@ updated: 2026-04-02
 tags: [harness-engineering, claude-code, prompt-cache, template, team]
 ---
 
-# CLAUDE.md 三层模板指南
+# CLAUDE.md Three-Layer Template Guide
 
-这份模板指南面向团队级 Claude Code harness 设计。核心目标不是把
-`CLAUDE.md` 写成“超长人设”，而是把稳定制度、按需加载和个人偏好拆到正确层级。
-它主要服务原则 2、5、7、10：把 prompt 当控制面、把上下文当工作内存、把恢复能力
-写入流程、把团队制度与个人偏好分离。
+This template guide is aimed at team-level Claude Code harness design. The core goal is not to write `CLAUDE.md` as an "extremely long system persona" — it is to distribute stable institution, on-demand loading, and personal preferences to the correct layers.
+It primarily serves principles 2, 5, 7, and 10: treat prompt as a control surface, treat context as working memory, encode recovery capability into the process, and separate team institution from personal preferences.
 
-## 三层结构
+## Three-Layer Structure
 
 ### Layer 1: repo-level
 
-- 文件位置：仓库根目录 `CLAUDE.md`
-- 推荐大小：约 3 KB，宁短勿散
-- 目标：放团队共享且稳定的边界、命令、目录地图、按需加载入口
-- 不要放：当前分支状态、临时 TODO、个人口头禅、易变上下文
+- File location: repository root `CLAUDE.md`
+- Recommended size: around 3 KB — lean is better than sprawling
+- Purpose: team-shared stable boundaries, commands, directory map, on-demand loading entry points
+- Do not include: current branch state, temporary TODOs, personal idioms, volatile context
 
 ### Layer 2: directory-level
 
-- 文件位置：子目录内 `CLAUDE.md`
-- 推荐大小：每个 package 或 domain 约 300 bytes 到 800 bytes
-- 目标：进入目录后再注入的局部约束，例如 package-specific commands、
-  schema 要求、测试位置、禁改边界
-- 不要放：仓库级重复规则
+- File location: `CLAUDE.md` inside a subdirectory
+- Recommended size: around 300 to 800 bytes per package or domain
+- Purpose: local constraints injected only upon entering the directory — e.g. package-specific commands, schema requirements, test locations, edit-boundary restrictions
+- Do not include: duplicated repo-level rules
 
 ### Layer 3: personal-level
 
-- 文件位置：`.claude/settings.local.json`
-- 目标：只属于个人、不应提交的本地设置，例如个人 hook、沙箱偏好、
-  本地 URL、实验性 override
-- 不要放：要求团队共同遵守的制度
+- File location: `.claude/settings.local.json`
+- Purpose: local settings that belong only to the individual and should not be committed — e.g. personal hooks, sandbox preferences, local URLs, experimental overrides
+- Do not include: institution that the whole team must follow
 
-## Layer 1 模板要点
+## Layer 1 Template Essentials
 
-repo-level `CLAUDE.md` 要回答五个问题：
+A repo-level `CLAUDE.md` should answer five questions:
 
-1. 先读什么。
-2. 绝对不能做什么。
-3. 常用验证命令是什么。
-4. 仓库结构怎么分层。
-5. 哪些内容按需加载，而不是开局全塞。
+1. What to read first.
+2. What is absolutely forbidden.
+3. What the common verification commands are.
+4. How the repository is structured in layers.
+5. What content is loaded on demand rather than front-loaded at the start.
 
-### Layer 1 完整示例
+### Layer 1 Complete Example
 
 ````md
 # Project entry
@@ -103,16 +101,16 @@ Read `AI_GUIDE.md` for repository architecture.
   tests, and any content-specific gate.
 ````
 
-这个层级对应原则 2 和 10：规则先进入团队制度，再进入每次会话。
+This layer corresponds to principles 2 and 10: rules enter team institution first, then enter each session.
 
-## Layer 2 模板要点
+## Layer 2 Template Essentials
 
-directory-level `CLAUDE.md` 只写“进入这个目录后必须立刻知道的事”。
-如果一条规则离开该目录仍成立，它就不该写在这里。
+A directory-level `CLAUDE.md` should only contain "things you absolutely need to know upon entering this directory."
+If a rule would still apply outside this directory, it does not belong here.
 
-### Layer 2 完整示例
+### Layer 2 Complete Example
 
-下面示例假设目录是 `packages/payments/CLAUDE.md`。
+The example below assumes the directory is `packages/payments/CLAUDE.md`.
 
 ```md
 # Payments package rules
@@ -144,18 +142,18 @@ Apply `governance/rules.md` first, then follow these package constraints.
 - `src/adapters/` provider integration
 ```
 
-这个层级对应原则 5：需要时才注入，不把 package 细节提前塞进根级记忆。
+This layer corresponds to principle 5: inject on demand, do not pre-load package details into root-level memory.
 
-## Layer 3 模板要点
+## Layer 3 Template Essentials
 
-个人层不应该污染团队制度。适合放：
+The personal layer should not pollute team institution. Appropriate content:
 
-- 本地开发 URL
-- 临时实验 hook
-- 个人允许列表或提醒
-- 机器相关路径
+- Local development URLs
+- Temporary experimental hooks
+- Personal allow lists or reminders
+- Machine-specific paths
 
-### Layer 3 完整示例
+### Layer 3 Complete Example
 
 ```json
 {
@@ -185,53 +183,51 @@ Apply `governance/rules.md` first, then follow these package constraints.
 }
 ```
 
-这个层级对应原则 10：个人效率手段不等于团队默认制度。
+This layer corresponds to principle 10: personal efficiency techniques are not the same as team default institution.
 
-## Prompt Cache optimization
+## Prompt Cache Optimization
 
-Prompt Cache 友好的关键不是“少写”，而是把稳定内容和易变内容分开，并把稳定内容放在
-文件前部。Claude Code 的 memory 会自动加载，越稳定的内容越适合被缓存复用。
+The key to Prompt Cache friendliness is not "write less" — it is separating stable content from volatile content, and placing stable content at the top of the file. Claude Code's memory system loads automatically, and the more stable the content, the more it benefits from cache reuse.
 
-### 推荐静态区
+### Recommended Static Zone
 
-放在 repo-level `CLAUDE.md` 前半部分：
+Place in the first half of the repo-level `CLAUDE.md`:
 
-- 项目定位
-- 硬边界
-- 常用命令
-- 目录结构
-- 角色分工
-- 固定验证规则
+- Project purpose
+- Hard boundaries
+- Common commands
+- Directory structure
+- Role assignments
+- Fixed verification rules
 
-这些内容跨 session 变化少，适合原则 2 和原则 5 所说的控制面与工作内存分离。
+This content changes little across sessions and is well-suited to the control surface and working memory separation described in principles 2 and 5.
 
-### 推荐动态区
+### Recommended Dynamic Zone
 
-不要直接写进 repo-level `CLAUDE.md`，而应放到以下位置：
+Do not write directly into the repo-level `CLAUDE.md` — instead place in:
 
-- `progress.md`：当前做到哪一步，对应原则 3 和原则 7
-- `.claude/settings.local.json`：个人实验设置
-- 子目录 `CLAUDE.md`：局部领域约束
-- hook 注入上下文：当前 dirty state、最新 typecheck 结果
+- `progress.md`: current step, corresponding to principles 3 and 7
+- `.claude/settings.local.json`: personal experiment settings
+- Subdirectory `CLAUDE.md`: local domain constraints
+- Hook-injected context: current dirty state, latest typecheck results
 
-### 静态与动态拆分示例
+### Static vs. Dynamic Split Example
 
-错误写法：
+Wrong approach:
 
-- 在根 `CLAUDE.md` 写“当前正在重构支付模块，记得看 `src/new/`”
-- 在根 `CLAUDE.md` 写“今天 lint 挂在 `checkout.ts`”
+- Writing "currently refactoring the payments module, remember to check `src/new/`" in the root `CLAUDE.md`
+- Writing "today lint is broken on `checkout.ts`" in the root `CLAUDE.md`
 
-正确写法：
+Correct approach:
 
-- 根 `CLAUDE.md` 只写“多步骤任务必须维护 `progress.md`”
-- 当前重构状态写进 workflow 对应的 `progress.md`
-- 当次 lint / typecheck 结果由 `UserPromptSubmit` hook 注入
+- Root `CLAUDE.md` only says "multi-step tasks must maintain a `progress.md`"
+- Current refactoring state goes in the workflow's corresponding `progress.md`
+- Current lint / typecheck results are injected by the `UserPromptSubmit` hook
 
-## 落地建议
+## Rollout Recommendations
 
-1. 先把 repo-level `CLAUDE.md` 压到 3 KB 左右，只保留硬边界与入口。
-2. 再为高风险目录补最小可用的 directory-level `CLAUDE.md`。
-3. 最后把个人偏好和本地实验迁到 `.claude/settings.local.json`。
+1. First compress the repo-level `CLAUDE.md` to around 3 KB, keeping only hard boundaries and entry points.
+2. Then add minimal directory-level `CLAUDE.md` files for high-risk directories.
+3. Finally migrate personal preferences and local experiments to `.claude/settings.local.json`.
 
-这样做的结果是：团队规则稳定、目录约束按需注入、个人偏好不污染共享制度，符合
-Harness Engineering 的分层控制思路。
+The result: team rules are stable, directory constraints are injected on demand, personal preferences do not pollute shared institution — consistent with the Harness Engineering layered control approach.

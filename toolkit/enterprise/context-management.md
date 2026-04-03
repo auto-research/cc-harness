@@ -1,5 +1,7 @@
+[中文版](./context-management.zh.md)
+
 ---
-title: Context management 设计参考
+title: Context Management Design Reference
 domain: tech
 type: reference
 created: 2026-04-02
@@ -7,75 +9,63 @@ updated: 2026-04-02
 tags: [harness-engineering, enterprise-agent]
 ---
 
-# Context management 设计参考
+# Context Management Design Reference
 
-企业 harness 的上下文管理不是“摘要一下历史消息”，而是分层压缩与缓存边界
-设计。最稳妥的做法，是把压缩分成五个阶段：snip、micro、context
-collapse、auto compact、reactive compact。阶段越靠后，成本越高，
-副作用越大，恢复要求也越强。
+Context management in an enterprise harness is not "summarize the history" — it is a tiered compression and cache boundary design. The most reliable approach is to organize compression into five stages: snip, micro, context collapse, auto compact, and reactive compact. The later the stage, the higher the cost, the larger the side effects, and the stronger the recovery requirements.
 
-## 五阶段压缩模型
+## Five-Stage Compression Model
 
-下面这张表给出五阶段压缩的最小决策框架。建议把它直接做成实现前的设计表。
+The table below provides the minimum decision framework for the five-stage compression model. Use it directly as a design table before implementation.
 
-| 阶段 | what | when | cost | failure modes |
-|------|------|------|------|---------------|
-| snip | 剪掉低信息噪音，如重复确认、冗长日志尾部 | 单次 turn 内就能判定无价值时 | 很低 | 误删局部证据，导致后续复盘缺细节 |
-| micro | 把短时间窗口压成细粒度摘要 | 最近若干 turn 开始膨胀，但细节仍重要 | 低到中 | 把临时失败压得太短，丢失失败序列 |
-| context collapse | 把一段已完成工作折叠成 checkpoint 摘要 | 子任务完成、阶段切换、handoff 前 | 中 | goal drift，阶段目标被压成“做过了” |
-| auto compact | 在接近阈值前自动触发压缩 | 预测下一轮会接近 budget 上限 | 中到高 | 自动压缩质量差，恢复信息不足 |
-| reactive compact | 已到危险区或已经报错后救火压缩 | prompt too long、上下文超预算、thread 太重 | 很高 | 恢复叙事断裂，甚至进入 compact loop |
+| Stage | What it does | When to trigger | Cost | Failure modes |
+|-------|-------------|-----------------|------|---------------|
+| snip | Remove low-information noise: repeated confirmations, trailing verbose logs | When content within a single turn is clearly worthless | Very low | Accidentally deletes local evidence, causing gaps in later retrospectives |
+| micro | Compress a short recent window into fine-grained summaries | When the last few turns are growing but details still matter | Low to medium | Compresses temporary failures too aggressively, losing the failure sequence |
+| context collapse | Fold a completed segment of work into a checkpoint summary | When a sub-task completes, a phase boundary is crossed, or before a handoff | Medium | Goal drift — a phase goal gets collapsed to "done" |
+| auto compact | Trigger compression automatically before approaching the budget limit | When the next turn is predicted to approach the budget ceiling | Medium to high | Poor auto-compact quality leaves insufficient recovery information |
+| reactive compact | Emergency compression after entering the danger zone or after an error | When `prompt too long`, context over-budget, or thread is too heavy | Very high | Recovery narrative breaks, or the system enters a compact loop |
 
-## 各阶段的角色边界
+## Role Boundaries Between Stages
 
-压缩阶段不要混用。snip 和 micro 面向局部清理，context collapse
-面向阶段归档，auto compact 面向预算预防，reactive compact 面向
-生存恢复。你可以共享底层摘要器，但不能把五个阶段当成同一条命令的不同参数，
-否则运行时很难知道“这是优化”还是“这是救火”。
+Do not mix compression stages. Snip and micro target local cleanup; context collapse targets phase archiving; auto compact targets budget prevention; reactive compact targets survival recovery. You may share an underlying summarizer, but you must not treat the five stages as different parameter values of the same command — otherwise it becomes impossible at runtime to tell "is this an optimization or a rescue operation?"
 
-## static / dynamic boundary
+## Static / Dynamic Boundary
 
-Prompt Cache 的收益，来自稳定前缀最大化，而不是来自“缓存开关已打开”。
-因此企业系统必须显式定义 static / dynamic boundary。
+The benefit of Prompt Cache comes from maximizing a stable prefix, not from "turning the cache switch on." Enterprise systems must therefore explicitly define the static/dynamic boundary.
 
-| 区域 | 应放内容 | 不该放内容 |
-|------|----------|------------|
-| static prefix | system rules、tool schema、稳定 repo 约束、长期 style 指令 | 本轮状态、临时 TODO、实时预算 |
-| dynamic suffix | 当前 task、最新 checkpoint、active budget、pending tool result | 长期不变规则、重复工具说明 |
+| Region | What belongs here | What does not belong here |
+|--------|------------------|--------------------------|
+| static prefix | System rules, tool schema, stable repo constraints, long-lived style instructions | Current-turn state, temporary TODOs, real-time budget |
+| dynamic suffix | Current task, latest checkpoint, active budget, pending tool result | Long-unchanged rules, repeated tool descriptions |
 
-一个实用判断法是：如果这段内容跨十个 turn 都不会变，就尽量放在 static
-prefix；如果它每一两轮就变，就放 dynamic suffix。
+A practical heuristic: if a piece of content will not change across ten turns, put it in the static prefix; if it changes every one or two turns, put it in the dynamic suffix.
 
-## Fork cache reuse
+## Fork Cache Reuse
 
-多 agent 场景里，Prompt Cache 的关键优化不是“再缓存一次”，而是让 fork
-出来的 agent 共享尽可能长的前缀。也就是说，主线程和子线程要尽量共用
-同一套 static prefix，只在 dynamic suffix 上分叉。
+In multi-agent scenarios, the key optimization for Prompt Cache is not "cache once more" — it is ensuring that forked agents share as long a prefix as possible. That means the main thread and sub-threads should share the same static prefix, diverging only in the dynamic suffix.
 
-这带来两个直接好处：
+This yields two direct benefits:
 
-1. 降 token 成本，因为缓存命中集中在高占比的前缀部分。
-2. 降 prompt drift，因为主线程和子线程的行为基线更一致。
+1. Lower token cost, because cache hits are concentrated in the high-proportion prefix.
+2. Less prompt drift, because the main thread and sub-threads share a more consistent behavioral baseline.
 
-## 五阶段的设计提醒
+## Design Reminders for Each Stage
 
-每个阶段都要回答“压缩后谁还能用这份结果”。面向模型的摘要、面向协调器的
-checkpoint、面向人工 operator 的进度说明，通常不是同一份文本。企业实现
-里更推荐一份结构化 state，加一份人类可读 summary，而不是只保留自然语言。
+Each stage must answer the question: "After compression, who will consume this result?" A summary intended for the model, a checkpoint intended for the coordinator, and a progress update intended for a human operator are usually not the same document. Enterprise implementations should prefer a structured state object plus a human-readable summary — not just natural language.
 
-## 什么时候不该压缩
+## When Not to Compress
 
-有三类内容不建议直接进入压缩器，即使 budget 很紧也一样。
+There are three categories of content that should not go directly into the compressor, even when the budget is tight.
 
-1. 原始目标和验收标准。它们必须单独保留，防止 goal drift。
-2. 最近一次失败的关键证据。没有证据，下一轮很容易重复犯错。
-3. 权限、deny、abort 的原始原因。恢复时必须知道系统为什么停下。
+1. The original goal and acceptance criteria. These must be preserved separately to prevent goal drift.
+2. The key evidence from the most recent failure. Without it, the next turn is likely to repeat the same mistake.
+3. The original reason for a permission deny, abort, or policy block. Recovery requires knowing why the system stopped.
 
-## 企业落地建议
+## Enterprise Implementation Advice
 
-如果你现在只能做一版 context management，优先做下面四件事。
+If you can only build one version of context management right now, prioritize these four things.
 
-1. 先定义 static / dynamic boundary。
-2. 再实现 snip 和 context collapse 两层。
-3. 然后给 auto compact 设软阈值，不要等 prompt too long 才开始。
-4. 最后才做 reactive compact，并为它单独加 anti-loop guard。
+1. Define the static / dynamic boundary first.
+2. Implement snip and context collapse as the two foundational tiers.
+3. Set a soft threshold for auto compact — do not wait for `prompt too long` before triggering it.
+4. Build reactive compact last, and give it a dedicated anti-loop guard.

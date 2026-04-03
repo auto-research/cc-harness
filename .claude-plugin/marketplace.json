@@ -22,7 +22,7 @@
       "repository": "https://github.com/auto-research/cc-harness",
       "license": "MIT",
       "skills": [
-        "./skills/harness-audit"
+        "./skills/cc-audit"
       ]
     }
   ]

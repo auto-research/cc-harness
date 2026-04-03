@@ -31,16 +31,16 @@
 }
 ```
 
-然后在任意项目中运行 `/harness-audit`。
+然后在任意项目中运行 `/cc-audit`。
 
 ### 手动安装 skill
 
 ```bash
 # 克隆并安装 skill
 git clone https://github.com/auto-research/cc-harness.git
-cp -r cc-harness/skills/harness-audit ~/.claude/skills/harness-audit
+cp -r cc-harness/skills/cc-audit ~/.claude/skills/cc-audit
 
-# 在你的项目中运行 — 输入：/harness-audit
+# 在你的项目中运行 — 输入：/cc-audit
 ```
 
 ### 全局 npm 安装
@@ -87,7 +87,7 @@ npm run scan -- --root /path/to/your/project
   P10 Team Institution         █████████░  5/5  PASS
 ```
 
-配合 Claude Code skill（`/harness-audit`）使用时，还会加上 LLM 层，得出完整的 **/100** 得分。
+配合 Claude Code skill（`/cc-audit`）使用时，还会加上 LLM 层，得出完整的 **/100** 得分。
 
 ## 十条原则
 
@@ -139,7 +139,7 @@ npm run scan -- --root /path/to/your/project
 
 ```
   ┌─────────────────────────────┐
-  │  /harness-audit             │
+  │  /cc-audit             │
   └──────────┬──────────────────┘
              │
   ┌──────────▼──────────────────┐

@@ -51,7 +51,7 @@ Output this exactly, substituting placeholders with actual values. Use 2-space i
 
   ──────────────────────────────────────────────
 
-  Full report: harness-audit --output report.md
+  Full report: cc-audit --output report.md
   Toolkit:     toolkit/README.md
 ```
 

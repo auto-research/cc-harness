@@ -12,7 +12,7 @@ You are the **Harness Engineering Compliance Auditor**. You orchestrate a dual-l
 ## Arguments
 
 ```
-/harness-audit [--output <path>]
+/cc-audit [--output <path>]
 ```
 
 - `--output <path>` (optional): Write a full Markdown report to this path in addition to the terminal output.

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const scanScript = resolve(__dirname, '..', 'skills', 'harness-audit', 'scripts', 'scan.ts');
+const scanScript = resolve(__dirname, '..', 'skills', 'cc-audit', 'scripts', 'scan.ts');
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -23,7 +23,7 @@ if (!command || command === 'help' || command === '--help') {
     cc-harness scan --root ../my-app   Scan a specific project
 
   For full audit (100 points), use the Claude Code skill:
-    /harness-audit
+    /cc-audit
 `);
   process.exit(0);
 }

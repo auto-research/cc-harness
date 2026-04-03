@@ -28,7 +28,7 @@ Total score: **/100**, with per-dimension breakdown and remediation links.
 /plugin install cc-harness@cc-harness
 ```
 
-Then run `/harness-audit` in any project.
+Then run `/cc-audit` in any project.
 
 ### Via settings.json
 
@@ -50,7 +50,7 @@ Then run `/harness-audit` in any project.
 
 ```bash
 git clone https://github.com/auto-research/cc-harness.git
-cp -r cc-harness/skills/harness-audit ~/.claude/skills/harness-audit
+cp -r cc-harness/skills/cc-audit ~/.claude/skills/cc-audit
 ```
 
 ### Global npm install
@@ -97,7 +97,7 @@ npm run scan -- --root /path/to/your/project
   P10 Team Institution         █████████░  5/5  PASS
 ```
 
-With Claude Code skill (`/harness-audit`), you also get the LLM layer for a full **/100** score.
+With Claude Code skill (`/cc-audit`), you also get the LLM layer for a full **/100** score.
 
 ## The 10 Principles
 
@@ -149,7 +149,7 @@ The `toolkit/` directory contains ready-to-use templates:
 
 ```
   ┌─────────────────────────────┐
-  │  /harness-audit             │
+  │  /cc-audit             │
   └──────────┬──────────────────┘
              │
   ┌──────────▼──────────────────┐

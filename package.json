@@ -28,7 +28,7 @@
     "cc-harness": "./bin/cc-harness.mjs"
   },
   "scripts": {
-    "scan": "tsx skills/harness-audit/scripts/scan.ts"
+    "scan": "tsx skills/cc-audit/scripts/scan.ts"
   },
   "devDependencies": {
     "tsx": "^4.0.0",

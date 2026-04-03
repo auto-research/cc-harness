@@ -151,7 +151,7 @@ function expandSegments(
       try {
         for (const entry of fs.readdirSync(base)) {
           const full = path.join(base, entry);
-          if (isDirectory(full) && !entry.startsWith(".git")) {
+          if (isDirectory(full) && !entry.startsWith(".git") && entry !== "node_modules" && entry !== ".next" && entry !== "dist") {
             // Keep ** active for deeper recursion
             results.push(...expandSegments(full, segments, index));
           }

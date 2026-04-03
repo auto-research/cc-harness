@@ -1,5 +1,3 @@
-[中文版](./multi-agent-patterns.zh.md)
-
 ---
 title: Multi-Agent Patterns Reference
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, enterprise-agent]
 ---
+
+[中文版](./multi-agent-patterns.zh.md)
 
 # Multi-Agent Patterns Reference
 

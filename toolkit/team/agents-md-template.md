@@ -1,5 +1,3 @@
-[中文版](./agents-md-template.zh.md)
-
 ---
 title: AGENTS.md Template Guide
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, codex, agents-md, template, team]
 ---
+
+[中文版](./agents-md-template.zh.md)
 
 # AGENTS.md Template Guide
 

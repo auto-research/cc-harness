@@ -1,5 +1,3 @@
-[中文版](./architecture.zh.md)
-
 ---
 title: Enterprise Harness Architecture Overview
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, enterprise-agent]
 ---
+
+[中文版](./architecture.zh.md)
 
 # Enterprise Harness Architecture Overview
 

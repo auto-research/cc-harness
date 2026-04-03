@@ -1,5 +1,3 @@
-[中文版](./agent-roles-template.zh.md)
-
 ---
 title: AGENT.md Role Template
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, agents, roles, template, team]
 ---
+
+[中文版](./agent-roles-template.zh.md)
 
 # AGENT.md Role Template
 

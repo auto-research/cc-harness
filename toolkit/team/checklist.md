@@ -1,5 +1,3 @@
-[中文版](./checklist.zh.md)
-
 ---
 title: 10-Minute AI Workflow Audit Checklist
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, checklist, audit, template, team]
 ---
+
+[中文版](./checklist.zh.md)
 
 # 10-Minute AI Workflow Audit Checklist
 

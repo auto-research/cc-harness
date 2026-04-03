@@ -1,5 +1,3 @@
-[中文版](./hooks-starter.zh.md)
-
 ---
 title: Claude Hooks Starter Templates
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, claude-code, hooks, template, team]
 ---
+
+[中文版](./hooks-starter.zh.md)
 
 # Claude Hooks Starter Templates
 

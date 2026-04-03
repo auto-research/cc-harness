@@ -1,5 +1,3 @@
-[中文版](./query-loop-design.zh.md)
-
 ---
 title: Query Loop Design Reference
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, enterprise-agent]
 ---
+
+[中文版](./query-loop-design.zh.md)
 
 # Query Loop Design Reference
 

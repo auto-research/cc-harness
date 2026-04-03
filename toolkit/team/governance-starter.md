@@ -1,5 +1,3 @@
-[中文版](./governance-starter.zh.md)
-
 ---
 title: Governance Starter Templates
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, governance, template, team]
 ---
+
+[中文版](./governance-starter.zh.md)
 
 # Governance Starter Templates
 

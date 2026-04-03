@@ -1,5 +1,3 @@
-[中文版](./checklist.zh.md)
-
 ---
 title: Enterprise Harness Design Checklist
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, enterprise-agent]
 ---
+
+[中文版](./checklist.zh.md)
 
 # Enterprise Harness Design Checklist
 

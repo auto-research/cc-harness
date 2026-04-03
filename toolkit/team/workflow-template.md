@@ -1,5 +1,3 @@
-[中文版](./workflow-template.zh.md)
-
 ---
 title: Workflow Template and Progress Tracking
 domain: tech
@@ -8,6 +6,8 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, workflow, progress, template, team]
 ---
+
+[中文版](./workflow-template.zh.md)
 
 # Workflow Template and Progress Tracking
 

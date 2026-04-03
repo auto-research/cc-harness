@@ -68,7 +68,7 @@ npm run scan -- --root /path/to/your/project
   ╩ ╩╩ ╩╩╚═╝╚╝╚═╝╚═╝╚═╝  ╩ ╩╚═╝═╩╝╩ ╩
   v0.1.0 · Harness Engineering Compliance Audit
 
-  Project    ai-assistant-hub
+  Project    my-project
   Score      41 / 50 (script layer)
 
   ──────────────────────────────────────────

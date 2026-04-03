@@ -6,14 +6,14 @@ created: 2026-04-02
 updated: 2026-04-02
 tags: [harness-engineering, claude-code, codex, agent-architecture, design-principles]
 sources:
-  - docs/知识/ai-agent-deep-dive-v2.pdf (Xiao Tan AI, Claude Code 源码架构深度解析 V2.0)
-  - docs/知识/book1-claude-code.pdf (@wquguru, Harness Engineering — Claude Code 设计指南)
-  - docs/知识/book2-comparing.pdf (@wquguru, Claude Code 和 Codex 的 Harness 设计哲学)
+  - Xiao Tan AI, Claude Code 源码架构深度解析 V2.0
+  - "@wquguru, Harness Engineering — Claude Code 设计指南"
+  - "@wquguru, Claude Code 和 Codex 的 Harness 设计哲学"
 ---
 
 # Harness Engineering 设计原则
 
-本文综合三份来源，提炼 AI coding agent 的 harness 设计原则。这些原则直接指导了 ai-assistant-hub v0.3.0 的四层架构重构。
+本文综合三份来源，提炼 AI coding agent 的 harness 设计原则。
 
 ## 核心立场
 
@@ -98,15 +98,15 @@ Prompt 在 agent 里不是人设文案，而是分层拼装的行为区块。真
 
 **各表一枝之处**: Claude Code 从运行时事故经验长出来，优先解决连续性和现场治理；Codex 从显式结构设计长出来，优先解决控制层命名、策略表达和可组合性。
 
-## 对 ai-assistant-hub 的指导意义
+## 落地建议
 
-我们的重构选择了**混合路线**：
+一种经过验证的**混合路线**：
 
-- **知识分层加载**（原则 5）→ knowledge/ 按域组织，按需加载
-- **行为写成制度**（原则 1、10）→ governance/ 独立于 knowledge/
-- **角色分离**（原则 8、9）→ agents/ 各有约束，librarian 只读
-- **中断恢复**（原则 7）→ workflows/ + progress.md
+- **知识分层加载**（原则 5）→ 按域组织知识，按需加载
+- **行为写成制度**（原则 1、10）→ governance 独立于知识层
+- **角色分离**（原则 8、9）→ 每个 agent 有约束，验证角色只读
+- **中断恢复**（原则 7）→ workflow 定义 + progress 追踪
 - **工具治理**（原则 4）→ hooks 自动检查
-- **验证独立**（原则 9）→ verification.md 反合理化规则
+- **验证独立**（原则 9）→ 反合理化规则
 
 后来者不该照抄产品，而该识别自己的主要不确定性在哪，然后决定秩序安放的位置。

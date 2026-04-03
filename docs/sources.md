@@ -45,4 +45,4 @@ The 10 Harness Engineering principles in cc-harness were distilled from three in
 
 ## Practical Validation
 
-These principles were validated by restructuring a real methodology repository (ai-assistant-hub, v0.3.0) and designing an AI workflow system for a production TypeScript monorepo (saas-sdk, 13 packages, 44K LOC).
+These principles were validated by restructuring a real-world personal knowledge base and designing an AI workflow system for a production TypeScript monorepo (13 packages, ~44K LOC).

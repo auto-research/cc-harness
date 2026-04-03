@@ -90,4 +90,4 @@ harness-toolkit/
 ## 来源与致谢
 
 - 源码分析：[Xiao Tan AI](https://x.com/tvytlx) / [@wquguru](https://agentway.dev)
-- 实践验证：ai-assistant-hub v0.3.0 重构 + saas-sdk 工作流设计
+- 实践验证：多个真实项目的工作流重构与设计

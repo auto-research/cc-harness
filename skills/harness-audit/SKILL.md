@@ -1,5 +1,5 @@
 ---
-name: harness-audit
+name: cc-audit
 description: "Scan any project to evaluate AI coding agent workflow compliance with 10 Harness Engineering principles. Dual-layer: deterministic script (50pts) + LLM semantic analysis (50pts). Output: score/100 + per-dimension PASS/WARN/FAIL + top 3 actions with toolkit fix links."
 user_invocable: true
 allowed-tools: [Read, Grep, Glob, Bash, Write]

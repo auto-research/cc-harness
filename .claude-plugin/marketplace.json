@@ -1,21 +1,29 @@
 {
-  "marketplace": {
-    "name": "cc-harness",
-    "description": "Harness Engineering audit and toolkit for AI coding agents",
-    "owner": {
-      "name": "auto-research"
-    }
+  "name": "cc-harness",
+  "description": "Harness Engineering audit tool + toolkit for AI coding agents, distilled from Claude Code source architecture",
+  "owner": {
+    "name": "auto-research",
+    "email": "auto-research@github.com"
+  },
+  "metadata": {
+    "description": "10-principle compliance audit with dual-layer scoring (deterministic + LLM)",
+    "version": "0.2.0"
   },
   "plugins": [
     {
-      "id": "cc-harness",
       "name": "cc-harness",
-      "description": "Harness Engineering compliance audit + toolkit. 10-principle evaluation with dual-layer scoring (deterministic + LLM).",
-      "version": "0.1.1",
-      "source": {
-        "type": "directory",
-        "path": "./"
-      }
+      "description": "Harness Engineering compliance audit + toolkit. Scan any project against 10 principles, get score/100 + fix suggestions.",
+      "source": "./",
+      "version": "0.2.0",
+      "author": {
+        "name": "auto-research"
+      },
+      "homepage": "https://github.com/auto-research/cc-harness",
+      "repository": "https://github.com/auto-research/cc-harness",
+      "license": "MIT",
+      "skills": [
+        "./skills/harness-audit"
+      ]
     }
   ]
 }

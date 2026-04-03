@@ -1,0 +1,474 @@
+{
+  "version": "1.0.0",
+  "root": "/Users/max/ai-assistant-hub",
+  "timestamp": "2026-04-03T02:30:02.704Z",
+  "commit": "9e5a78c",
+  "dimensions": [
+    {
+      "id": "P1",
+      "name": "约束制度化",
+      "name_en": "Constraint Codification",
+      "principle": "模型是不稳定部件",
+      "score": 5,
+      "max": 5,
+      "checks": [
+        {
+          "name": "禁令文件存在",
+          "name_en": "Constraint file exists",
+          "pass": true,
+          "path": "governance/dont.md"
+        },
+        {
+          "name": "条目数 >= 3",
+          "name_en": "Entries >= 3",
+          "pass": true,
+          "detail": "15 entries"
+        },
+        {
+          "name": "内容 > 200 字符",
+          "name_en": "Content > 200 chars",
+          "pass": true,
+          "detail": "1488 chars"
+        },
+        {
+          "name": "有结构化格式",
+          "name_en": "Has structured format (## headings)",
+          "pass": true
+        },
+        {
+          "name": "文件被 git 追踪",
+          "name_en": "File is git tracked",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "governance/dont.md",
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "files_for_llm": [
+        "governance/dont.md"
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "控制面分层",
+      "name_en": "Control Plane Layering",
+      "principle": "Prompt 是控制面",
+      "score": 4,
+      "max": 5,
+      "checks": [
+        {
+          "name": "入口文件存在",
+          "name_en": "Entry file exists",
+          "pass": true,
+          "path": "CLAUDE.md"
+        },
+        {
+          "name": "入口文件 < 8KB",
+          "name_en": "Entry file size < 8KB",
+          "pass": true,
+          "detail": "968 bytes"
+        },
+        {
+          "name": "有目录级入口",
+          "name_en": "Has directory-level entries (>= 1)",
+          "pass": false,
+          "detail": "0 directory-level files"
+        },
+        {
+          "name": "无重复全量加载指令",
+          "name_en": "No duplicate full-load instructions",
+          "pass": true
+        },
+        {
+          "name": "文件被 git 追踪",
+          "name_en": "File is git tracked",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "files_for_llm": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "工作流连续性",
+      "name_en": "Workflow Continuity",
+      "principle": "Query loop 是心跳",
+      "score": 5,
+      "max": 5,
+      "checks": [
+        {
+          "name": "工作流文件存在",
+          "name_en": "Workflow file exists",
+          "pass": true,
+          "detail": "6 workflow files"
+        },
+        {
+          "name": "有步骤编号",
+          "name_en": "Has step numbering",
+          "pass": true
+        },
+        {
+          "name": "有 quality gate 引用",
+          "name_en": "Has quality gate reference",
+          "pass": true
+        },
+        {
+          "name": "进度模板存在",
+          "name_en": "Progress template exists",
+          "pass": true,
+          "path": "templates/workflow-progress.md"
+        },
+        {
+          "name": ">= 2 个工作流文件",
+          "name_en": ">= 2 workflow files",
+          "pass": true,
+          "detail": "6 files"
+        }
+      ],
+      "files_found": [
+        "workflows/interview-prep.md",
+        "workflows/investment-research.md",
+        "workflows/knowledge-capture.md",
+        "workflows/tech-article.md",
+        "workflows/wechat-publish.md",
+        "workflows/xhs-publish.md",
+        "templates/workflow-progress.md"
+      ],
+      "files_for_llm": [
+        "workflows/interview-prep.md",
+        "workflows/investment-research.md",
+        "templates/workflow-progress.md"
+      ]
+    },
+    {
+      "id": "P4",
+      "name": "工具治理",
+      "name_en": "Tool Governance",
+      "principle": "工具是受管接口",
+      "score": 5,
+      "max": 5,
+      "checks": [
+        {
+          "name": "hooks 配置存在",
+          "name_en": "Hooks config exists",
+          "pass": true
+        },
+        {
+          "name": "有 PreToolUse 或等效",
+          "name_en": "Has PreToolUse or pre-commit equivalent",
+          "pass": true
+        },
+        {
+          "name": "有 PostToolUse 或等效",
+          "name_en": "Has PostToolUse or post-commit equivalent",
+          "pass": true
+        },
+        {
+          "name": "hook 脚本可执行",
+          "name_en": "Hook scripts are executable",
+          "pass": true
+        },
+        {
+          "name": "覆盖 Bash/shell 工具",
+          "name_en": "Covers Bash/shell tools",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        ".claude/settings.json"
+      ],
+      "files_for_llm": [
+        ".claude/settings.json"
+      ]
+    },
+    {
+      "id": "P5",
+      "name": "上下文预算",
+      "name_en": "Context Budget",
+      "principle": "上下文是工作内存",
+      "score": 4,
+      "max": 5,
+      "checks": [
+        {
+          "name": "目录级入口 >= 3",
+          "name_en": "Directory-level entries >= 3",
+          "pass": false,
+          "detail": "0 directory-level files"
+        },
+        {
+          "name": "入口总大小 < 15KB",
+          "name_en": "Total entry file size < 15KB",
+          "pass": true,
+          "detail": "1732 bytes total"
+        },
+        {
+          "name": "无单文件 > 8KB",
+          "name_en": "No single entry file > 8KB",
+          "pass": true,
+          "detail": "max 968 bytes"
+        },
+        {
+          "name": "有按需加载指引",
+          "name_en": "Has on-demand loading instruction",
+          "pass": true
+        },
+        {
+          "name": "有静态/动态分区概念",
+          "name_en": "Has static/dynamic separation concept",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "files_for_llm": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ]
+    },
+    {
+      "id": "P6",
+      "name": "错误路径",
+      "name_en": "Error Path",
+      "principle": "错误路径 = 主路径",
+      "score": 2,
+      "max": 5,
+      "checks": [
+        {
+          "name": "PostToolUse 或写入后检查存在",
+          "name_en": "PostToolUse or post-write hook exists",
+          "pass": true
+        },
+        {
+          "name": "有 lint/typecheck hook",
+          "name_en": "Has lint/typecheck in hooks",
+          "pass": false
+        },
+        {
+          "name": "有 Stop/session-end hook",
+          "name_en": "Has Stop/session-end hook",
+          "pass": false
+        },
+        {
+          "name": "错误处理文档存在",
+          "name_en": "Error handling doc exists",
+          "pass": true,
+          "path": "knowledge/tech/expertise/harness-toolkit/enterprise/error-recovery.md"
+        },
+        {
+          "name": "CI 配置存在",
+          "name_en": "CI config exists",
+          "pass": false
+        }
+      ],
+      "files_found": [
+        ".claude/settings.json",
+        "knowledge/tech/expertise/harness-toolkit/enterprise/error-recovery.md"
+      ],
+      "files_for_llm": [
+        ".claude/settings.json",
+        "knowledge/tech/expertise/harness-toolkit/enterprise/error-recovery.md"
+      ]
+    },
+    {
+      "id": "P7",
+      "name": "中断恢复",
+      "name_en": "Interrupt Recovery",
+      "principle": "恢复目标是续写",
+      "score": 3,
+      "max": 5,
+      "checks": [
+        {
+          "name": "进度模板存在",
+          "name_en": "Progress template exists",
+          "pass": true,
+          "path": "templates/workflow-progress.md"
+        },
+        {
+          "name": "有 session-start hook",
+          "name_en": "Session-start hook exists (UserPromptSubmit)",
+          "pass": false
+        },
+        {
+          "name": "session-start 有健康检查",
+          "name_en": "Session-start does health check",
+          "pass": false
+        },
+        {
+          "name": "进度模板有 YAML frontmatter",
+          "name_en": "Progress template has YAML frontmatter",
+          "pass": true
+        },
+        {
+          "name": "工作流引用恢复/续写",
+          "name_en": "Workflow files reference recovery/resume",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "templates/workflow-progress.md",
+        ".claude/settings.json"
+      ],
+      "files_for_llm": [
+        "templates/workflow-progress.md",
+        "workflows/interview-prep.md",
+        "workflows/investment-research.md"
+      ]
+    },
+    {
+      "id": "P8",
+      "name": "角色分离",
+      "name_en": "Role Separation",
+      "principle": "多代理靠角色分离",
+      "score": 5,
+      "max": 5,
+      "checks": [
+        {
+          "name": "角色定义 >= 2",
+          "name_en": "Agent definitions >= 2",
+          "pass": true,
+          "detail": "5 agents"
+        },
+        {
+          "name": "有只读角色",
+          "name_en": "Has read-only agent",
+          "pass": true
+        },
+        {
+          "name": "角色有 YAML frontmatter",
+          "name_en": "Agents have YAML frontmatter",
+          "pass": true
+        },
+        {
+          "name": "tools 字段有差异",
+          "name_en": "Tools field differs between agents",
+          "pass": true
+        },
+        {
+          "name": "knowledge_access 有差异",
+          "name_en": "Knowledge access differs between agents",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "agents/content-editor/AGENT.md",
+        "agents/investment-analyst/AGENT.md",
+        "agents/librarian/AGENT.md",
+        "agents/life-assistant/AGENT.md",
+        "agents/tech-advisor/AGENT.md"
+      ],
+      "files_for_llm": [
+        "agents/content-editor/AGENT.md",
+        "agents/investment-analyst/AGENT.md",
+        "agents/librarian/AGENT.md"
+      ]
+    },
+    {
+      "id": "P9",
+      "name": "验证独立",
+      "name_en": "Independent Verification",
+      "principle": "验证必须独立",
+      "score": 3,
+      "max": 5,
+      "checks": [
+        {
+          "name": "验证文件存在",
+          "name_en": "Verification file exists",
+          "pass": true,
+          "path": "governance/verification.md"
+        },
+        {
+          "name": "有反合理化规则",
+          "name_en": "Has anti-rationalization rules",
+          "pass": true
+        },
+        {
+          "name": "reviewer 角色存在",
+          "name_en": "Reviewer/verifier role exists",
+          "pass": false
+        },
+        {
+          "name": "reviewer 是只读角色",
+          "name_en": "Reviewer is read-only",
+          "pass": false
+        },
+        {
+          "name": "有 PASS/FAIL 输出格式",
+          "name_en": "Has PASS/FAIL output format",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "governance/verification.md"
+      ],
+      "files_for_llm": [
+        "governance/verification.md"
+      ]
+    },
+    {
+      "id": "P10",
+      "name": "团队制度",
+      "name_en": "Team Institution",
+      "principle": "制度 > 技巧",
+      "score": 5,
+      "max": 5,
+      "checks": [
+        {
+          "name": "governance 目录存在",
+          "name_en": "Governance directory exists",
+          "pass": true,
+          "path": "governance/"
+        },
+        {
+          "name": "规则文件 >= 2",
+          "name_en": "Rule files >= 2",
+          "pass": true,
+          "detail": "4 rule files"
+        },
+        {
+          "name": "有 quality-gates 文件",
+          "name_en": "Has quality-gates file",
+          "pass": true,
+          "path": "governance/quality-gates.md"
+        },
+        {
+          "name": "规则有格式规范",
+          "name_en": "Rules have consistent format (## headings)",
+          "pass": true
+        },
+        {
+          "name": "不依赖口头传递",
+          "name_en": "Has explicit written rules (not oral knowledge)",
+          "pass": true
+        }
+      ],
+      "files_found": [
+        "governance/",
+        "governance/dont.md",
+        "governance/quality-gates.md",
+        "governance/rules.md",
+        "governance/verification.md"
+      ],
+      "files_for_llm": [
+        "governance/quality-gates.md",
+        "governance/dont.md",
+        "governance/quality-gates.md"
+      ]
+    }
+  ],
+  "summary": {
+    "script_score": 41,
+    "script_max": 50,
+    "dimensions_found": 10,
+    "dimensions_missing": []
+  }
+}

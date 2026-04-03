@@ -1,15 +1,34 @@
 {
   "name": "cc-harness",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Harness Engineering audit tool + toolkit for AI coding agents, distilled from Claude Code source architecture",
   "license": "MIT",
-  "repository": "auto-research/cc-harness",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auto-research/cc-harness.git"
+  },
+  "homepage": "https://github.com/auto-research/cc-harness",
   "type": "module",
   "engines": {
     "node": ">=20"
   },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "harness-engineering",
+    "ai-agent",
+    "audit",
+    "skills",
+    "toolkit",
+    "cursor",
+    "windsurf",
+    "copilot"
+  ],
+  "bin": {
+    "cc-harness": "./bin/cc-harness.mjs"
+  },
   "scripts": {
-    "scan": "tsx audit/scripts/scan.ts"
+    "scan": "tsx skills/harness-audit/scripts/scan.ts"
   },
   "devDependencies": {
     "tsx": "^4.0.0",

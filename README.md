@@ -16,28 +16,48 @@ Total score: **/100**, with per-dimension breakdown and remediation links.
 
 ## Quick Start
 
-### As a Claude Code skill
+### As a Claude Code plugin (recommended)
 
-```bash
-# Clone the repo
-git clone https://github.com/auto-research/cc-harness.git
+Enable in your Claude Code settings:
 
-# Install the skill
-cp -r cc-harness/audit ~/.claude/skills/harness-audit
-
-# Run in your project
-cd your-project
-# Type: /harness-audit
+```jsonc
+// .claude/settings.json
+{
+  "enabledPlugins": {
+    "cc-harness@auto-research": true
+  }
+}
 ```
 
-### Script-only mode (no LLM needed)
+Then run `/harness-audit` in any project.
+
+### Manual skill install
+
+```bash
+# Clone and install the skill
+git clone https://github.com/auto-research/cc-harness.git
+cp -r cc-harness/skills/harness-audit ~/.claude/skills/harness-audit
+
+# Run in your project — type: /harness-audit
+```
+
+### Global npm install
+
+```bash
+npm i -g cc-harness
+
+# Scan any project (script layer only, no LLM)
+cc-harness scan --root /path/to/your/project
+```
+
+### Script-only mode (no install)
 
 ```bash
 git clone https://github.com/auto-research/cc-harness.git
 cd cc-harness && npm install
 
 # Scan any project
-npx tsx audit/scripts/scan.ts --root /path/to/your/project
+npm run scan -- --root /path/to/your/project
 ```
 
 ## Sample Output
